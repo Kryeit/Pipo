@@ -23,8 +23,8 @@ public class Discord {
             return 0;
         }
 
-        player.sendMessage(Text.literal("Discord -> https://discord.gg/5zQ8RVEzvw")
-                .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://discord.gg/5zQ8RVEzvw"))));
+        player.sendMessage(Text.literal("Discord -> https://kryeit.com/discord")
+                .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://kryeit.com/discord"))));
         return Command.SINGLE_SUCCESS;
     }
 
