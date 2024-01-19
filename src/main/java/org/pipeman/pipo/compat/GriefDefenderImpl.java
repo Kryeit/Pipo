@@ -9,7 +9,7 @@ import java.util.function.IntSupplier;
 
 public class GriefDefenderImpl {
 
-    public static final String ID = "GriefDefender";
+    public static final String ID = "griefdefender";
 
     public static boolean isAvailable() {
         return FabricLoader.getInstance().isModLoaded(ID);
