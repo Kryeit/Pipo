@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import org.pipeman.pipo.commands.CommandListener;
 import org.pipeman.pipo.commands.minecraft.CommandLinkDiscord;
 import org.pipeman.pipo.commands.minecraft.CommandUnlinkDiscord;
+import org.pipeman.pipo.commands.minecraft.Discord;
 import org.pipeman.pipo.listener.discord.DirectMessageListener;
 import org.pipeman.pipo.listener.discord.DownloadModsListener;
 import org.pipeman.pipo.listener.minecraft.PlayerLogin;
@@ -104,6 +105,7 @@ public final class Pipo implements DedicatedServerModInitializer {
         CommandRegistrationCallback.EVENT.register((dispatcher, dedicatedServer, commandFunction) -> {
             CommandLinkDiscord.register(dispatcher);
             CommandUnlinkDiscord.register(dispatcher);
+            Discord.register(dispatcher);
         });
     }
 

@@ -6,12 +6,13 @@ import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.ClickEvent;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import org.pipeman.pipo.Pipo;
 
 import java.util.function.Supplier;
 
-public class CommandUnlinkDiscord {
+public class Discord {
     public static int execute(CommandContext<ServerCommandSource> context) {
         ServerCommandSource source = context.getSource();
         ServerPlayerEntity player = source.getPlayer();
@@ -22,26 +23,14 @@ public class CommandUnlinkDiscord {
             return 0;
         }
 
-        if (Pipo.instance.minecraftToDiscord.getElement(player.getUuid()) == null) {
-            Supplier<Text> message = () -> Text.of("You haven't linked your account");
-            source.sendFeedback(message, false);
-            return 0;
-        }
-
-        try {
-            Pipo.instance.minecraftToDiscord.removeElement(player.getUuid());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return 0;
-        }
-
-        player.sendMessage(Text.literal("Your account has been unlinked"));
+        player.sendMessage(Text.literal("Discord -> https://discord.gg/5zQ8RVEzvw")
+                .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://discord.gg/5zQ8RVEzvw"))));
         return Command.SINGLE_SUCCESS;
     }
 
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
-        dispatcher.register(CommandManager.literal("unlinkdiscord")
-                .executes(CommandUnlinkDiscord::execute)
+        dispatcher.register(CommandManager.literal("discord")
+                .executes(Discord::execute)
         );
     }
 }
