@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.world.World;
@@ -107,11 +108,9 @@ public final class Pipo implements DedicatedServerModInitializer {
     }
 
     public void registerDisableEvent() {
-        ServerWorldEvents.UNLOAD.register((server, world) -> {
-            if (world.getRegistryKey() == World.OVERWORLD) {
-                JDA.shutdown();
-                JDA = null;
-            }
+        ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
+            JDA.shutdown();
+            JDA = null;
         });
     }
 
