@@ -28,7 +28,13 @@ public class CommandUnlinkDiscord {
             return 0;
         }
 
-        Pipo.instance.minecraftToDiscord.getHashMap().remove(player.getUuid());
+        try {
+            Pipo.instance.minecraftToDiscord.removeElement(player.getUuid());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+        
         player.sendMessage(Text.literal("Your account has been unlinked"));
         return Command.SINGLE_SUCCESS;
     }

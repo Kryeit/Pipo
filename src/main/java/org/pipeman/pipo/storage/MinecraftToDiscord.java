@@ -59,6 +59,12 @@ public class MinecraftToDiscord {
         setHashMap(uuidStringMap);
     }
 
+    public void removeElement(UUID playerID) throws IOException {
+        Map<UUID, String> uuidStringMap = getHashMap();
+        uuidStringMap.remove(playerID);
+        setHashMap(uuidStringMap);
+    }
+
     public String getElement(UUID playerID) {
         return getHashMap().get(playerID);
     }
