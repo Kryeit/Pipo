@@ -1,6 +1,7 @@
 package org.pipeman.pipo.offline;
 
 import com.mojang.authlib.GameProfile;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.UserCache;
 import org.pipeman.pipo.MinecraftServerSupplier;
 
@@ -13,6 +14,8 @@ import java.util.UUID;
 public class Offlines {
 
     public static UUID getUUIDbyName(String name) {
+        ServerPlayerEntity player = MinecraftServerSupplier.getServer().getPlayerManager().getPlayer(name);
+        if (player != null) return player.getUuid();
         UserCache userCache = MinecraftServerSupplier.getServer().getUserCache();
         if (userCache == null) return null;
         Optional<GameProfile> gameProfile = userCache.findByName(name);
@@ -20,6 +23,8 @@ public class Offlines {
     }
 
     public static String getNameByUUID(UUID id) {
+        ServerPlayerEntity player = MinecraftServerSupplier.getServer().getPlayerManager().getPlayer(id);
+        if (player != null) return player.getName().getString();
         UserCache userCache = MinecraftServerSupplier.getServer().getUserCache();
         if (userCache == null) return "";
         Optional<GameProfile> gameProfile = userCache.getByUuid(id);

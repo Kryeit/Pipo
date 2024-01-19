@@ -13,7 +13,9 @@ public record PlayerInformation(int rank, long playtime, long lastSeen, boolean 
                 Utils.getPlaytime(playerName),
                 Utils.getLastPlayed(playerName),
                 Utils.isOnline(playerName),
-                GriefDefenderImpl.isAvailable() ? Optional.of(GriefDefenderImpl.getClaimBlocks(Offlines.getUUIDbyName(playerName))) : Optional.empty()
+                GriefDefenderImpl.isAvailable() ?
+                        Optional.of(GriefDefenderImpl.getClaimBlocks(Offlines.getUUIDbyName(playerName))) :
+                        Optional.empty()
         ));
     }
 }
