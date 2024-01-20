@@ -176,4 +176,8 @@ public class Utils {
             user.data().remove(Node.builder("group." + permission).build());
         });
     }
+
+    public static UUID getPlayerLinked(Member member) {
+        return Pipo.getInstance().minecraftToDiscord.getHashMap().keySet().stream().filter(uuid -> Pipo.getInstance().minecraftToDiscord.getHashMap().get(uuid).equals(member.getId())).findFirst().orElse(null);
+    }
 }
