@@ -7,9 +7,6 @@ import org.pipeman.pipo.Pipo;
 import org.pipeman.pipo.commands.minecraft.CommandLinkDiscord;
 
 import java.io.IOException;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
 
 public class DirectMessageListener extends ListenerAdapter {
     @Override
