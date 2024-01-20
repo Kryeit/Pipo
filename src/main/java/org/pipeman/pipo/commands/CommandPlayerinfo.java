@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.utils.FileUpload;
+import org.pipeman.pipo.Pipo;
 import org.pipeman.pipo.PlayerInformation;
 import org.pipeman.pipo.Utils;
 import org.pipeman.pipo.offline.Offlines;
@@ -13,7 +14,9 @@ import java.awt.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 public class CommandPlayerinfo {
     private static final DateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
@@ -22,7 +25,19 @@ public class CommandPlayerinfo {
         OptionMapping playerOption = event.getOption("playername");
         String playerName = playerOption == null ? null : playerOption.getAsString();
 
-        if (playerName == null || playerName.isEmpty()) return;
+        if (playerName == null || playerName.isEmpty()) {
+            for (UUID player : Pipo.getInstance().minecraftToDiscord.getHashMap().keySet()) {
+                String userID = Pipo.getInstance().minecraftToDiscord.getHashMap().get(player);
+                if (userID.equals(event.getUser().getId())) {
+                    playerName = Offlines.getNameByUUID(player);
+                    break;
+                }
+            }
+            if (playerName == null || playerName.isEmpty()) {
+                event.reply("You need to specify a player name or link your Minecraft account to your Discord account.").setEphemeral(true).queue();
+                return;
+            }
+        };
         EmbedBuilder embedBuilder = new EmbedBuilder();
         embedBuilder.setTitle(playerName);
         embedBuilder.setColor(new Color(59, 152, 0));
