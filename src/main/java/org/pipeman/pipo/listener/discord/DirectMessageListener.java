@@ -17,12 +17,12 @@ public class DirectMessageListener extends ListenerAdapter {
 
 
         if (event.getAuthor().isBot()) return; // Ignore messages from other bots
+        if (!event.isFromType(ChannelType.PRIVATE)) return;
 
         String message = event.getMessage().getContentRaw();
 
         int code = Integer.parseInt(message);
 
-        if (!event.isFromType(ChannelType.PRIVATE)) return;
 
         if (CommandLinkDiscord.codes.containsKey(code)) {
             try {
