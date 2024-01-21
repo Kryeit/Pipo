@@ -6,16 +6,12 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import org.pipeman.pipo.Leaderboard;
 import org.pipeman.pipo.Leaderboard.LeaderboardEntry;
-import org.pipeman.pipo.PlayerInformation;
+import org.pipeman.pipo.Leaderboard.Order;
 import org.pipeman.pipo.Utils;
-import org.pipeman.pipo.offline.Offlines;
-import org.pipeman.pipo.offline.OfflinesStats;
 
 import java.awt.*;
 import java.text.MessageFormat;
-import java.util.Comparator;
 import java.util.List;
-import java.util.function.Function;
 
 public class CommandTopN {
     public static void handle(SlashCommandInteractionEvent event) {
@@ -38,7 +34,8 @@ public class CommandTopN {
             return;
         }
 
-        List<LeaderboardEntry> leaderboard = Leaderboard.getLeaderboard(limit, offset);
+        Order order = sortDescending ? Order.DESC : Order.ASC;
+        List<LeaderboardEntry> leaderboard = Leaderboard.getLeaderboard(order, orderBy, limit, offset);
         if (leaderboard.isEmpty()) {
             event.replyEmbeds(Utils.createErrorEmbed("Offset must be less than the leaderboard's length"))
                     .setEphemeral(true)
@@ -46,13 +43,11 @@ public class CommandTopN {
             return;
         }
 
-        leaderboard.sort(getComparator(orderBy, sortDescending));
-
         replyWithLeaderboard(leaderboard, offset + 1, event);
     }
 
     public static void handleTop10(SlashCommandInteractionEvent event) {
-        replyWithLeaderboard(Leaderboard.getLeaderboard(10), 1, event);
+        replyWithLeaderboard(Leaderboard.getLeaderboard(Order.DESC, "playtime", 10), 1, event);
     }
 
     private static void replyWithLeaderboard(List<LeaderboardEntry> entries, int startRank, SlashCommandInteractionEvent event) {
@@ -62,8 +57,8 @@ public class CommandTopN {
         int rank = startRank;
         for (LeaderboardEntry le : entries) {
             String newLine = MessageFormat.format(
-                    "**{0}:** {1} ({2}h)\n",
-                    rank, escapeName(le.name()), Utils.round(le.playtime() / 3_600d, 1)
+                    "**{0}:** {1} ({2})\n",
+                    rank, escapeName(le.name()), le.value().formatted()
             );
             if (newLine.length() + content.length() > MessageEmbed.VALUE_MAX_LENGTH) break;
 
@@ -80,25 +75,5 @@ public class CommandTopN {
 
     private static String escapeName(String name) {
         return name.replace("_", "\\_");
-    }
-
-    // I think this is the ugliest code I've ever written.
-    private static Comparator<LeaderboardEntry> getComparator(String orderingKey, boolean sortDescending) {
-        Function<LeaderboardEntry, Long> mapper = switch (orderingKey) {
-            case "playtime" -> LeaderboardEntry::playtime;
-            case "last-played" -> entry -> PlayerInformation.of(entry.name()).orElseThrow().lastSeen();
-            case "distance-walked" -> statisticMapper("walk_one_cm");
-            case "deaths" -> statisticMapper("deaths");
-            case "mob-kills" -> statisticMapper("mob_kills");
-
-            default -> throw new IllegalStateException("Unexpected value: " + orderingKey);
-        };
-
-        Comparator<LeaderboardEntry> comparator = Comparator.comparingLong(mapper::apply);
-        return sortDescending ? comparator.reversed() : comparator;
-    }
-
-    private static Function<LeaderboardEntry, Long> statisticMapper(String stat) {
-        return entry -> OfflinesStats.getPlayerStat(stat, Offlines.getUUIDbyName(entry.name()));
     }
 }
