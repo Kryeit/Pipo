@@ -9,6 +9,8 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import org.pipeman.pipo.Pipo;
 
+import java.lang.reflect.Member;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 public class CommandUnlinkDiscord {
@@ -22,7 +24,9 @@ public class CommandUnlinkDiscord {
             return 0;
         }
 
-        if (Pipo.instance.minecraftToDiscord.getElement(player.getUuid()) == null) {
+        String member = Pipo.instance.minecraftToDiscord.getElement(player.getUuid());
+
+        if (Objects.equals(member, "") || member == null) {
             Supplier<Text> message = () -> Text.of("You haven't linked your account");
             source.sendFeedback(message, false);
             return 0;
