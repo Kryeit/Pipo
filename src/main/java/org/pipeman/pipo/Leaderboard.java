@@ -53,11 +53,11 @@ public class Leaderboard {
 
             public Value(String name, String playerName) {
                 rawValue = switch (name) {
-                    case "playtime" -> Utils.getPlaytime(name);
-                    case "last-played" -> PlayerInformation.of(name).map(PlayerInformation::lastSeen).orElse(0L);
-                    case "distance-walked" -> statisticMapper("walk_one_cm", name);
-                    case "deaths" -> statisticMapper("deaths", name);
-                    case "mob-kills" -> statisticMapper("mob_kills", name);
+                    case "playtime" -> Utils.getPlaytime(playerName);
+                    case "last-played" -> PlayerInformation.of(playerName).map(PlayerInformation::lastSeen).orElse(0L);
+                    case "distance-walked" -> statisticMapper("walk_one_cm", playerName);
+                    case "deaths" -> statisticMapper("deaths", playerName);
+                    case "mob-kills" -> statisticMapper("mob_kills", playerName);
 
                     default -> throw new IllegalStateException("Unexpected value: " + name);
                 };
