@@ -7,6 +7,7 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.pipeman.pipo.Pipo;
 
 import java.util.HashMap;
@@ -39,6 +40,12 @@ public class CommandLinkDiscord {
         }
 
         codes.put(random4Digits, player.getUuid());
+
+        Text.literal("Send a private message (DM) to ").append(
+                Text.literal("Pipeman Bot").formatted(Formatting.GOLD)
+        ).append(
+                Text.literal(" with the following code: " + random4Digits).formatted(Formatting.WHITE)
+        );
 
         player.sendMessage(Text.literal("Send a private message to " + " with the following code: " + random4Digits));
         return Command.SINGLE_SUCCESS;
