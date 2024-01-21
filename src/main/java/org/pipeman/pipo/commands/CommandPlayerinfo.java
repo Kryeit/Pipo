@@ -31,7 +31,7 @@ public class CommandPlayerinfo {
                 event.reply("You need to specify a player name or link your Minecraft account to your Discord account.").setEphemeral(true).queue();
                 return;
             }
-        };
+        }
         EmbedBuilder embedBuilder = new EmbedBuilder();
         embedBuilder.setTitle(playerName);
         embedBuilder.setColor(new Color(59, 152, 0));

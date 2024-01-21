@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.ISnowflake;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -86,8 +87,19 @@ public final class Pipo implements DedicatedServerModInitializer {
             guild.upsertCommand("top-n", "Returns a list of the most active users. Limit and offset can be specified")
                     .addOption(OptionType.INTEGER, "limit", "Limit of elements to return", true)
                     .addOption(OptionType.INTEGER, "offset", "Offset of the returned elements in the list", true)
-                    .queue();
 
+                    .addOptions(new OptionData(OptionType.STRING, "order-by", "Order by statistic (The playtime is used if omitted)", false)
+                            .addChoice("playtime", "Playtime")
+                            .addChoice("last-played", "Last played")
+                            .addChoice("distance-walked", "Distance walked")
+                            .addChoice("deaths", "Deaths")
+                            .addChoice("mob-kills", "Mob kills")
+                    )
+                    .addOptions(new OptionData(OptionType.STRING, "sort-direction", "Sorting direction (descending is used if omitted)", false)
+                            .addChoice("ascending", "Ascending order: Low values first")
+                            .addChoice("descending", "Descending order: High values first")
+                    )
+                    .queue();
         } else {
             System.out.println("Guild is null!");
         }

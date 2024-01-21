@@ -6,16 +6,23 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import org.pipeman.pipo.Leaderboard;
 import org.pipeman.pipo.Leaderboard.LeaderboardEntry;
+import org.pipeman.pipo.PlayerInformation;
 import org.pipeman.pipo.Utils;
+import org.pipeman.pipo.offline.Offlines;
+import org.pipeman.pipo.offline.OfflinesStats;
 
 import java.awt.*;
 import java.text.MessageFormat;
+import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
 
 public class CommandTopN {
     public static void handle(SlashCommandInteractionEvent event) {
         int limit = event.getOption("limit", 10, OptionMapping::getAsInt);
         int offset = event.getOption("offset", 0, OptionMapping::getAsInt);
+        boolean sortDescending = event.getOption("sort-direction", true, OptionMapping::getAsBoolean);
+        String orderBy = event.getOption("order-by", "playtime", OptionMapping::getAsString);
 
         if (limit < 1) {
             event.replyEmbeds(Utils.createErrorEmbed("Limit must be greater than 0"))
@@ -38,6 +45,8 @@ public class CommandTopN {
                     .queue();
             return;
         }
+
+        leaderboard.sort(getComparator(orderBy, sortDescending));
 
         replyWithLeaderboard(leaderboard, offset + 1, event);
     }
@@ -71,5 +80,25 @@ public class CommandTopN {
 
     private static String escapeName(String name) {
         return name.replace("_", "\\_");
+    }
+
+    // I think this is the ugliest code I've ever written.
+    private static Comparator<LeaderboardEntry> getComparator(String orderingKey, boolean sortDescending) {
+        Function<LeaderboardEntry, Long> mapper = switch (orderingKey) {
+            case "playtime" -> LeaderboardEntry::playtime;
+            case "last-played" -> entry -> PlayerInformation.of(entry.name()).orElseThrow().lastSeen();
+            case "distance-walked" -> statisticMapper("walk_one_cm");
+            case "deaths" -> statisticMapper("deaths");
+            case "mob-kills" -> statisticMapper("mob_kills");
+
+            default -> throw new IllegalStateException("Unexpected value: " + orderingKey);
+        };
+
+        Comparator<LeaderboardEntry> comparator = Comparator.comparingLong(mapper::apply);
+        return sortDescending ? comparator.reversed() : comparator;
+    }
+
+    private static Function<LeaderboardEntry, Long> statisticMapper(String stat) {
+        return entry -> OfflinesStats.getPlayerStat(stat, Offlines.getUUIDbyName(entry.name()));
     }
 }
