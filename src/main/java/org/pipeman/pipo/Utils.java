@@ -20,11 +20,9 @@ import java.awt.image.RenderedImage;
 import java.io.ByteArrayOutputStream;
 import java.net.URI;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -38,7 +36,7 @@ public class Utils {
         try {
             String uuid = new JSONObject(
                     CLIENT.send(
-                            HttpRequest.newBuilder(URI.create("https://api.mojang.com/users/profiles/minecraft/" + URLEncoder.encode(name, StandardCharsets.UTF_8))).build(),
+                            HttpRequest.newBuilder(URI.create("https://api.mojang.com/users/profiles/minecraft/" + name)).build(),
                             HttpResponse.BodyHandlers.ofString()
                     ).body()
             ).getString("id");
