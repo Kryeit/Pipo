@@ -96,8 +96,8 @@ public final class Pipo implements DedicatedServerModInitializer {
                             .addChoice("mob-kills", "mob-kills")
                     )
                     .addOptions(new OptionData(OptionType.STRING, "sort-direction", "Sorting direction (descending is used if omitted)", false)
-                            .addChoice("ascending", "Ascending order: Low values first")
-                            .addChoice("descending", "Descending order: High values first")
+                            .addChoice("ascending", "ascending")
+                            .addChoice("descending", "descending")
                     )
                     .queue();
         } else {
