@@ -9,6 +9,7 @@ import java.util.UUID;
 public class Autorole extends TimerTask {
     public final static String KRYEITOR = "1009788977894666240";
     public final static String COLLABORATOR = "1041751895062089779";
+    public final static String BOOSTER = "1019980287867887720";
 
     private final Guild guild;
     private final Role role;

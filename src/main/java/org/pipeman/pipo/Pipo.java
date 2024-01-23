@@ -33,6 +33,7 @@ import java.util.Timer;
 public final class Pipo implements DedicatedServerModInitializer {
     private static final Timer KRYEITOR_TIMER = new Timer();
     private static final Timer COLLABORATOR_TIMER = new Timer();
+    private static final Timer BOOSTER_TIMER = new Timer();
 
     public static JDA JDA;
     public final static String KRYEIT_GUILD = "910626990468497439";
@@ -140,9 +141,10 @@ public final class Pipo implements DedicatedServerModInitializer {
     }
 
     public void scheduleTimers() {
-        long interval = Duration.ofMinutes(30).toMillis();
+        long interval = Duration.ofMinutes(5).toMillis();
         KRYEITOR_TIMER.schedule(new Autorole(JDA.getRoleById(Autorole.KRYEITOR)), interval, interval);
         COLLABORATOR_TIMER.schedule(new Autorole(JDA.getRoleById(Autorole.COLLABORATOR)), interval, interval);
+        BOOSTER_TIMER.schedule(new Autorole(JDA.getRoleById(Autorole.BOOSTER)), interval, interval);
     }
 
 }
