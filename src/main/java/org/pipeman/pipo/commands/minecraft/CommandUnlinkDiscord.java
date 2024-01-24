@@ -24,7 +24,7 @@ public class CommandUnlinkDiscord {
             return 0;
         }
 
-        String member = Pipo.instance.minecraftToDiscord.getElement(player.getUuid());
+        String member = Pipo.getInstance().minecraftToDiscord.getElement(player.getUuid());
 
         if (Objects.equals(member, "") || member == null) {
             Supplier<Text> message = () -> Text.of("You haven't linked your account");
@@ -33,7 +33,7 @@ public class CommandUnlinkDiscord {
         }
 
         try {
-            Pipo.instance.minecraftToDiscord.removeElement(player.getUuid());
+            Pipo.getInstance().minecraftToDiscord.removeElement(player.getUuid());
         } catch (Exception e) {
             e.printStackTrace();
             return 0;

@@ -27,7 +27,7 @@ public class CommandLinkDiscord {
             return 0;
         }
 
-        if (Pipo.instance.minecraftToDiscord.getElement(player.getUuid()) != null) {
+        if (Pipo.getInstance().minecraftToDiscord.hasElement(player.getUuid())) {
             Supplier<Text> message = () -> Text.of("You already linked your account, use /unlinkdiscord to unlink it");
             source.sendFeedback(message, false);
             return 0;
