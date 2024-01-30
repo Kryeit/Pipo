@@ -26,6 +26,7 @@ public class CommandUnlinkDiscord {
 
         String member = Pipo.getInstance().minecraftToDiscord.getElement(player.getUuid());
 
+        System.out.println("member: " + member);
         if (Objects.equals(member, "") || member == null) {
             Supplier<Text> message = () -> Text.of("You haven't linked your account");
             source.sendFeedback(message, false);

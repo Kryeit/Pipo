@@ -60,8 +60,12 @@ public class MinecraftToDiscord {
     }
 
     public void removeElement(UUID playerID) throws IOException {
+        System.out.println("Removing " + playerID.toString() + " from the map");
         Map<UUID, String> uuidStringMap = getHashMap();
+
+        System.out.println("Map: " + uuidStringMap);
         uuidStringMap.remove(playerID);
+        System.out.println("Map after: " + uuidStringMap);
         setHashMap(uuidStringMap);
     }
 
