@@ -6,8 +6,6 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.pipeman.pipo.Pipo;
 import org.pipeman.pipo.commands.minecraft.CommandLinkDiscord;
 
-import java.io.IOException;
-
 public class DirectMessageListener extends ListenerAdapter {
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
@@ -22,14 +20,10 @@ public class DirectMessageListener extends ListenerAdapter {
 
 
         if (CommandLinkDiscord.codes.containsKey(code)) {
-            try {
-                Pipo.getInstance().minecraftToDiscord.addElement(CommandLinkDiscord.codes.get(code), String.valueOf(event.getAuthor().getIdLong()));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            Pipo.getInstance().minecraftToDiscord.addElement(CommandLinkDiscord.codes.get(code), String.valueOf(event.getAuthor().getIdLong()));
+
             event.getChannel().sendMessage("Your account has been linked to this UUID: " + CommandLinkDiscord.codes.get(code)).queue();
             CommandLinkDiscord.codes.remove(code);
-
         }
     }
 }

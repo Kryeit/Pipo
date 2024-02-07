@@ -9,7 +9,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import org.pipeman.pipo.Pipo;
 
-import java.lang.reflect.Member;
 import java.util.Objects;
 import java.util.function.Supplier;
 
@@ -33,12 +32,7 @@ public class CommandUnlinkDiscord {
             return 0;
         }
 
-        try {
-            Pipo.getInstance().minecraftToDiscord.removeElement(player.getUuid());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return 0;
-        }
+        Pipo.getInstance().minecraftToDiscord.removeElement(player.getUuid());
 
         player.sendMessage(Text.literal("Your account has been unlinked"));
         return Command.SINGLE_SUCCESS;
