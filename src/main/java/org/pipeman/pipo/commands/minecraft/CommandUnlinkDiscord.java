@@ -23,7 +23,7 @@ public class CommandUnlinkDiscord {
             return 0;
         }
 
-        String member = Pipo.getInstance().minecraftToDiscord.getElement(player.getUuid());
+        String member = Pipo.getInstance().discordRegistry.getDiscordId(player.getUuid());
 
         System.out.println("member: " + member);
         if (Objects.equals(member, "") || member == null) {
@@ -32,7 +32,7 @@ public class CommandUnlinkDiscord {
             return 0;
         }
 
-        Pipo.getInstance().minecraftToDiscord.removeElement(player.getUuid());
+        Pipo.getInstance().discordRegistry.unlinkPlayer(player.getUuid());
 
         player.sendMessage(Text.literal("Your account has been unlinked"));
         return Command.SINGLE_SUCCESS;

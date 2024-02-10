@@ -21,7 +21,7 @@ import org.pipeman.pipo.listener.discord.DownloadModsListener;
 import org.pipeman.pipo.listener.minecraft.PlayerLogin;
 import org.pipeman.pipo.listener.minecraft.PlayerQuit;
 import org.pipeman.pipo.storage.LastTimePlayed;
-import org.pipeman.pipo.storage.MinecraftToDiscord;
+import org.pipeman.pipo.storage.PlayerDiscordRegistry;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -38,7 +38,7 @@ public final class Pipo implements DedicatedServerModInitializer {
     public static JDA JDA;
     public final static String KRYEIT_GUILD = "910626990468497439";
     public LastTimePlayed lastTimePlayed;
-    public MinecraftToDiscord minecraftToDiscord;
+    public PlayerDiscordRegistry discordRegistry;
     public static Pipo instance;
 
     @Override
@@ -46,9 +46,10 @@ public final class Pipo implements DedicatedServerModInitializer {
         instance = this;
         CommandLinkDiscord.codes = new HashMap<>();
 
-        minecraftToDiscord = new MinecraftToDiscord();
+
         try {
             lastTimePlayed = new LastTimePlayed("mods/pipo/last_time_played");
+            discordRegistry = new PlayerDiscordRegistry("mods/pipo", "discord_registry.properties");
 
             InputStream in = this.getClass().getResourceAsStream("/secret.txt");
             if (in == null) {

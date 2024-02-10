@@ -20,7 +20,7 @@ public class DirectMessageListener extends ListenerAdapter {
 
 
         if (CommandLinkDiscord.codes.containsKey(code)) {
-            Pipo.getInstance().minecraftToDiscord.addElement(CommandLinkDiscord.codes.get(code), String.valueOf(event.getAuthor().getIdLong()));
+            Pipo.getInstance().discordRegistry.linkPlayerToDiscord(CommandLinkDiscord.codes.get(code), String.valueOf(event.getAuthor().getIdLong()));
 
             event.getChannel().sendMessage("Your account has been linked to this UUID: " + CommandLinkDiscord.codes.get(code)).queue();
             CommandLinkDiscord.codes.remove(code);

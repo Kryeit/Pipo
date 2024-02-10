@@ -151,7 +151,7 @@ public class Utils {
 
     public static UUID getMinecraftId(Member member) {
         AtomicReference<UUID> id = new AtomicReference<>();
-        Pipo.getInstance().minecraftToDiscord.getHashMap().forEach(((uuid, memberid) -> {
+        Pipo.getInstance().discordRegistry.getHashMap().forEach(((uuid, memberid) -> {
             if (memberid.equals(member.getId())) id.set(uuid);
         }));
         return id.get();
@@ -178,6 +178,6 @@ public class Utils {
     }
 
     public static UUID getPlayerLinked(Member member) {
-        return Pipo.getInstance().minecraftToDiscord.getHashMap().keySet().stream().filter(uuid -> Pipo.getInstance().minecraftToDiscord.getHashMap().get(uuid).equals(member.getId())).findFirst().orElse(null);
+        return Pipo.getInstance().discordRegistry.getHashMap().keySet().stream().filter(uuid -> Pipo.getInstance().discordRegistry.getHashMap().get(uuid).equals(member.getId())).findFirst().orElse(null);
     }
 }
