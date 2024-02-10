@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 public class PlayerDiscordRegistry {
@@ -53,6 +54,13 @@ public class PlayerDiscordRegistry {
 
     public boolean hasDiscordId(String discordId) {
         return playerDiscordMap.containsValue(discordId);
+    }
+
+    public Optional<UUID> getPlayerUuid(String discordId) {
+        return playerDiscordMap.entrySet().stream()
+                .filter(entry -> entry.getValue().equals(discordId))
+                .map(Map.Entry::getKey)
+                .findFirst();
     }
 
     private void saveRegistry() {

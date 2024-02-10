@@ -26,7 +26,6 @@ import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
 public class Utils {
@@ -150,11 +149,7 @@ public class Utils {
     }
 
     public static UUID getMinecraftId(Member member) {
-        AtomicReference<UUID> id = new AtomicReference<>();
-        Pipo.getInstance().discordRegistry.getHashMap().forEach(((uuid, memberid) -> {
-            if (memberid.equals(member.getId())) id.set(uuid);
-        }));
-        return id.get();
+        return Pipo.getInstance().discordRegistry.getPlayerUuid(member.getId()).orElse(null);
     }
 
     public static CompletableFuture<Boolean> isPlayerOnGroup(UUID who, String group) {
@@ -178,6 +173,6 @@ public class Utils {
     }
 
     public static UUID getPlayerLinked(Member member) {
-        return Pipo.getInstance().discordRegistry.getHashMap().keySet().stream().filter(uuid -> Pipo.getInstance().discordRegistry.getHashMap().get(uuid).equals(member.getId())).findFirst().orElse(null);
+        return Pipo.getInstance().discordRegistry.getPlayerUuid(member.getId()).orElse(null);
     }
 }
