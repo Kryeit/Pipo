@@ -73,6 +73,10 @@ public final class Pipo implements DedicatedServerModInitializer {
 
         Guild guild = JDA.getGuildById(KRYEIT_GUILD);
         if (guild != null) {
+
+            guild.upsertCommand("tps", "Returns current TPS")
+                    .queue();
+
             guild.upsertCommand("online", "Returns currently online players")
                     .queue();
 
