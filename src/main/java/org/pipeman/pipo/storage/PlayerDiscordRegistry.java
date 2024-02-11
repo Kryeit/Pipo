@@ -16,11 +16,13 @@ public class PlayerDiscordRegistry {
     public PlayerDiscordRegistry(String directory, String fileName) throws IOException {
         Files.createDirectories(Paths.get(directory));
         this.registryFile = new File(directory, fileName);
+        if (!registryFile.exists()) {
+            registryFile.createNewFile(); // This will create the file if it doesn't exist
+        }
         loadRegistry();
     }
 
     private void loadRegistry() {
-        if (!registryFile.exists()) return;
         try (BufferedReader reader = new BufferedReader(new FileReader(registryFile))) {
             String line;
             while ((line = reader.readLine()) != null) {
