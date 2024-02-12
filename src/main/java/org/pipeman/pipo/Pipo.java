@@ -31,9 +31,9 @@ import java.util.HashMap;
 import java.util.Timer;
 
 public final class Pipo implements DedicatedServerModInitializer {
-    private static final Timer KRYEITOR_TIMER = new Timer();
-    private static final Timer COLLABORATOR_TIMER = new Timer();
-    private static final Timer BOOSTER_TIMER = new Timer();
+    private static final Timer KRYEITOR_TIMER = new Timer(true);
+    private static final Timer COLLABORATOR_TIMER = new Timer(true);
+    private static final Timer BOOSTER_TIMER = new Timer(true);
 
     public static JDA JDA;
     public final static String KRYEIT_GUILD = "910626990468497439";

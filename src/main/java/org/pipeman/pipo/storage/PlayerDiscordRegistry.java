@@ -17,7 +17,7 @@ public class PlayerDiscordRegistry {
         Files.createDirectories(Paths.get(directory));
         this.registryFile = new File(directory, fileName);
         if (!registryFile.exists()) {
-            registryFile.createNewFile(); // This will create the file if it doesn't exist
+            registryFile.createNewFile();
         }
         loadRegistry();
     }
