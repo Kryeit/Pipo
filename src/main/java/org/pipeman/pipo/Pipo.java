@@ -58,7 +58,7 @@ public final class Pipo implements DedicatedServerModInitializer {
             String token = new String(in.readAllBytes()).trim();
             in.close();
             JDA = JDABuilder.createDefault(token)
-                    .setActivity(Activity.watching("to 0 players"))
+                    .setActivity(Activity.watching("0 players"))
                     .enableIntents(GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_MEMBERS)
                     .build();
 

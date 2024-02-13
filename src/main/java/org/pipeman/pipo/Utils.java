@@ -145,7 +145,7 @@ public class Utils {
     }
 
     public static int getOnlinePlayersSize() {
-        return MinecraftServerSupplier.getServer().getCurrentPlayerCount();
+        return MinecraftServerSupplier.getServer().getPlayerManager().getCurrentPlayerCount();
     }
 
     public static UUID getMinecraftId(Member member) {
