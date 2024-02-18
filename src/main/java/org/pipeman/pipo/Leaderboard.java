@@ -73,7 +73,7 @@ public class Leaderboard {
             }
 
             private static long statisticMapper(String stat, String playerName) {
-                return OfflinesStats.getPlayerStat(stat, Offlines.getUUIDbyName(playerName));
+                return OfflinesStats.getPlayerStat(stat, Offlines.getUUIDbyName(playerName).orElse(null));
             }
 
             private static String formatLastPlayed(long date) {

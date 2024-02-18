@@ -128,16 +128,18 @@ public class Utils {
 
     public static long getPlaytime(String name) {
 
-        UUID id = Offlines.getUUIDbyName(name);
+        Optional<UUID> id = Offlines.getUUIDbyName(name);
+        if (id.isEmpty()) return 0;
     //    long afkTime = AFK_PLUS.getPlayer(player).getTotalTimeAFK() / 1000;
         Stat<Identifier> stat = Stats.CUSTOM.getOrCreateStat(Stats.PLAY_TIME);
-        long playtime = OfflinesStats.getPlayerStat("play_time", id) / 20;
+        long playtime = OfflinesStats.getPlayerStat("play_time", id.get()) / 20;
     //    return Math.max(0, playtime - afkTime);
         return Math.max(0, playtime);
     }
 
     public static long getLastPlayed(String name) {
-        return Pipo.getInstance().lastTimePlayed.getElement(Offlines.getUUIDbyName(name)) * 1000;
+        Optional<UUID> id = Offlines.getUUIDbyName(name);
+        return id.map(uuid -> Pipo.getInstance().lastTimePlayed.getElement(uuid) * 1000).orElse(-1L);
     }
 
     public static boolean isOnline(String name) {
@@ -145,7 +147,7 @@ public class Utils {
     }
 
     public static int getOnlinePlayersSize() {
-        return MinecraftServerSupplier.getServer().getPlayerManager().getCurrentPlayerCount();
+        return MinecraftServerSupplier.getServer().getCurrentPlayerCount();
     }
 
     public static UUID getMinecraftId(Member member) {

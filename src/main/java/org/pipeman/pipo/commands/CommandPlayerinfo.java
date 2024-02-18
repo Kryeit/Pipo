@@ -25,7 +25,7 @@ public class CommandPlayerinfo {
         if (playerName == null || playerName.isEmpty()) {
 
             // Check if the user has linked their Minecraft account to their Discord account
-            playerName = Offlines.getNameByUUID(Utils.getPlayerLinked(event.getMember()));
+            playerName = Offlines.getNameByUUID(Utils.getPlayerLinked(event.getMember())).orElse(null);
 
             if (playerName == null || playerName.isEmpty()) {
                 event.reply("You need to specify a player name or link your Minecraft account to your Discord account.").setEphemeral(true).queue();
@@ -74,9 +74,9 @@ public class CommandPlayerinfo {
             embedBuilder.addField(
                     "Other statistics",
                     String.format("%.1f km walked, %d deaths, %d mobs killed",
-                            OfflinesStats.getPlayerStat("walk_one_cm", Offlines.getUUIDbyName(finalPlayerName)) / 100_000d,
-                            OfflinesStats.getPlayerStat("deaths", Offlines.getUUIDbyName(finalPlayerName)),
-                            OfflinesStats.getPlayerStat("mob_kills", Offlines.getUUIDbyName(finalPlayerName))
+                            OfflinesStats.getPlayerStat("walk_one_cm", Offlines.getUUIDbyName(finalPlayerName).orElse(null)) / 100_000d,
+                            OfflinesStats.getPlayerStat("deaths", Offlines.getUUIDbyName(finalPlayerName).orElse(null)),
+                            OfflinesStats.getPlayerStat("mob_kills", Offlines.getUUIDbyName(finalPlayerName).orElse(null))
                     ),
                     false
             );

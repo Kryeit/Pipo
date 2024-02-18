@@ -6,45 +6,63 @@ import net.minecraft.util.UserCache;
 import org.pipeman.pipo.MinecraftServerSupplier;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 public class Offlines {
 
-    public static UUID getUUIDbyName(String name) {
-        ServerPlayerEntity player = MinecraftServerSupplier.getServer().getPlayerManager().getPlayer(name);
-        if (player != null) return player.getUuid();
-        UserCache userCache = MinecraftServerSupplier.getServer().getUserCache();
-        if (userCache == null) return null;
-        Optional<GameProfile> gameProfile = userCache.findByName(name);
-        return gameProfile.map(GameProfile::getId).orElse(null);
+    private static final Logger LOGGER = Logger.getLogger(Offlines.class.getName());
+
+    public static Optional<UUID> getUUIDbyName(String name) {
+        return Optional.ofNullable(getPlayerByName(name))
+                .map(ServerPlayerEntity::getUuid)
+                .or(() -> Optional.ofNullable(MinecraftServerSupplier.getServer().getUserCache())
+                        .flatMap(cache -> cache.findByName(name).map(GameProfile::getId)));
     }
 
-    public static String getNameByUUID(UUID id) {
-        ServerPlayerEntity player = MinecraftServerSupplier.getServer().getPlayerManager().getPlayer(id);
-        if (player != null) return player.getName().getString();
-        UserCache userCache = MinecraftServerSupplier.getServer().getUserCache();
-        if (userCache == null) return "";
-        Optional<GameProfile> gameProfile = userCache.getByUuid(id);
-        return gameProfile.map(GameProfile::getName).orElse("");
+    public static Optional<String> getNameByUUID(UUID id) {
+        return Optional.ofNullable(getPlayerById(id))
+                .map(player -> player.getName().getString())
+                .or(() -> Optional.ofNullable(MinecraftServerSupplier.getServer().getUserCache())
+                        .flatMap(cache -> cache.getByUuid(id).map(GameProfile::getName)));
     }
 
     public static List<String> getPlayerNames() {
         List<String> players = new ArrayList<>();
-        File playerDataDirectory = new File("world/playerdata/");
+        Path playerDataDirectory = Path.of("world/playerdata");
 
-        File[] playerDataFiles = playerDataDirectory.listFiles();
-
-        if (playerDataFiles == null) return List.of();
-
-        for (File playerDataFile : playerDataFiles) {
-            String fileName = playerDataFile.getName();
-            if (!fileName.endsWith(".dat")) continue;
-            UUID id = UUID.fromString(fileName.substring(0, fileName.length() - 4));
-            players.add(getNameByUUID(id));
+        try {
+            Files.walk(playerDataDirectory, 1)
+                    .filter(Files::isRegularFile)
+                    .map(Path::getFileName)
+                    .map(Path::toString)
+                    .filter(fileName -> fileName.endsWith(".dat"))
+                    .map(fileName -> fileName.substring(0, fileName.length() - 4))
+                    .forEach(fileName -> {
+                        try {
+                            UUID id = UUID.fromString(fileName);
+                            getNameByUUID(id).ifPresent(players::add);
+                        } catch (IllegalArgumentException e) {
+                            LOGGER.warning("Invalid UUID in playerdata filename: " + fileName);
+                        }
+                    });
+        } catch (Exception e) {
+            LOGGER.severe("Failed to list player data files: " + e.getMessage());
         }
+
         return players;
+    }
+
+    private static ServerPlayerEntity getPlayerByName(String name) {
+        return MinecraftServerSupplier.getServer().getPlayerManager().getPlayer(name);
+    }
+
+    private static ServerPlayerEntity getPlayerById(UUID id) {
+        return MinecraftServerSupplier.getServer().getPlayerManager().getPlayer(id);
     }
 }
