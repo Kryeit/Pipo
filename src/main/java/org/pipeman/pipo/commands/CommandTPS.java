@@ -3,15 +3,11 @@ package org.pipeman.pipo.commands;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import org.pipeman.pipo.MinecraftServerSupplier;
 import org.pipeman.pipo.Utils;
 import org.pipeman.pipo.tps.Lag;
 
 import java.awt.*;
 import java.text.DecimalFormat;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 public class CommandTPS {
     private static final DecimalFormat format = new DecimalFormat("#.##");

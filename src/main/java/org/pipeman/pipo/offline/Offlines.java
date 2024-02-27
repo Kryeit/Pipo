@@ -2,10 +2,8 @@ package org.pipeman.pipo.offline;
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.UserCache;
 import org.pipeman.pipo.MinecraftServerSupplier;
 
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;

@@ -26,9 +26,10 @@ import org.pipeman.pipo.storage.PlayerDiscordRegistry;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.Duration;
 import java.util.HashMap;
 import java.util.Timer;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public final class Pipo implements DedicatedServerModInitializer {
     private static final Timer KRYEITOR_TIMER = new Timer(true);
@@ -146,10 +147,10 @@ public final class Pipo implements DedicatedServerModInitializer {
     }
 
     public void scheduleTimers() {
-        long interval = Duration.ofMinutes(5).toMillis();
-        KRYEITOR_TIMER.schedule(new Autorole(JDA.getRoleById(Autorole.KRYEITOR)), interval, interval);
-        COLLABORATOR_TIMER.schedule(new Autorole(JDA.getRoleById(Autorole.COLLABORATOR)), interval, interval);
-        BOOSTER_TIMER.schedule(new Autorole(JDA.getRoleById(Autorole.BOOSTER)), interval, interval);
+        ScheduledExecutorService executor = JDA.getRateLimitPool();
+        executor.scheduleAtFixedRate(new Autorole(JDA.getRoleById(Autorole.KRYEITOR)), 5, 5, TimeUnit.MINUTES);
+        executor.scheduleAtFixedRate(new Autorole(JDA.getRoleById(Autorole.COLLABORATOR)), 5, 5, TimeUnit.MINUTES);
+        executor.scheduleAtFixedRate(new Autorole(JDA.getRoleById(Autorole.BOOSTER)), 5, 5, TimeUnit.MINUTES);
     }
 
 }
