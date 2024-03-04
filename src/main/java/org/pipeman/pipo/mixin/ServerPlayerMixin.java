@@ -2,12 +2,8 @@ package org.pipeman.pipo.mixin;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.world.World;
 import org.pipeman.pipo.afk.AfkPlayer;
 import org.pipeman.pipo.afk.Config;
@@ -18,7 +14,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static org.pipeman.pipo.Pipo.lastActiveTime;
 

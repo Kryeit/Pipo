@@ -3,7 +3,6 @@ package org.pipeman.pipo.mixin;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import org.pipeman.pipo.afk.AfkPlayer;
 import org.pipeman.pipo.afk.Config;
 import org.spongepowered.asm.mixin.Mixin;

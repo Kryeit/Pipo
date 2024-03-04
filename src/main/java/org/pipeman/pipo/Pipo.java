@@ -28,9 +28,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public final class Pipo implements DedicatedServerModInitializer {
     private static final Timer KRYEITOR_TIMER = new Timer(true);
@@ -150,10 +149,29 @@ public final class Pipo implements DedicatedServerModInitializer {
     }
 
     public void scheduleTimers() {
-        ScheduledExecutorService executor = JDA.getRateLimitPool();
-        executor.scheduleAtFixedRate(new Autorole(JDA.getRoleById(Autorole.KRYEITOR)), 5, 5, TimeUnit.MINUTES);
-        executor.scheduleAtFixedRate(new Autorole(JDA.getRoleById(Autorole.COLLABORATOR)), 5, 5, TimeUnit.MINUTES);
-        executor.scheduleAtFixedRate(new Autorole(JDA.getRoleById(Autorole.BOOSTER)), 5, 5, TimeUnit.MINUTES);
+        // Schedule for KRYEITOR role
+        KRYEITOR_TIMER.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                new Autorole(JDA.getRoleById(Autorole.KRYEITOR)).run();
+            }
+        }, 5 * 60 * 1000, 5 * 60 * 1000);
+
+        // Schedule for COLLABORATOR role
+        COLLABORATOR_TIMER.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                new Autorole(JDA.getRoleById(Autorole.COLLABORATOR)).run();
+            }
+        }, 5 * 60 * 1000, 5 * 60 * 1000);
+
+        // Schedule for BOOSTER role
+        BOOSTER_TIMER.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                new Autorole(JDA.getRoleById(Autorole.BOOSTER)).run();
+            }
+        }, 5 * 60 * 1000, 5 * 60 * 1000);
     }
 
 }
