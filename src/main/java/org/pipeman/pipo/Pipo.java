@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Timer;
+import java.util.UUID;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -41,6 +42,8 @@ public final class Pipo implements DedicatedServerModInitializer {
     public LastTimePlayed lastTimePlayed;
     public PlayerDiscordRegistry discordRegistry;
     public static Pipo instance;
+
+    public static HashMap<UUID, Long> lastActiveTime = new HashMap<>();
 
     @Override
     public void onInitializeServer() {

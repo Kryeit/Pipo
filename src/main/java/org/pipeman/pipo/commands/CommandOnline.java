@@ -3,7 +3,9 @@ package org.pipeman.pipo.commands;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.minecraft.server.network.ServerPlayerEntity;
 import org.pipeman.pipo.MinecraftServerSupplier;
+import org.pipeman.pipo.afk.AfkPlayer;
 import org.pipeman.pipo.tps.Lag;
 
 import java.awt.*;
@@ -20,8 +22,20 @@ public class CommandOnline {
         List<String> names = Arrays.asList(MinecraftServerSupplier.getServer().getPlayerNames());
         Collections.sort(names);
 
+        ServerPlayerEntity player;
+        AfkPlayer afkPlayer;
+
         for (String name : names) {
-            players.append("- ").append(name.replace("_", "\\_")).append('\n');
+            name = name.replace("_", "\\_");
+
+            player = MinecraftServerSupplier.getServer().getPlayerManager().getPlayer(name);
+            afkPlayer = (AfkPlayer) player;
+
+            if (afkPlayer.stuff$isAfk()) {
+                name = "_" + name + "_";
+            }
+
+            players.append("- ").append(name).append('\n');
         }
 
         MessageEmbed embed = new EmbedBuilder()
