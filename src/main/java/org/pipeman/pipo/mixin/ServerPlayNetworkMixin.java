@@ -24,11 +24,11 @@ public abstract class ServerPlayNetworkMixin {
     private void updateAfkStatus(CallbackInfo ci) {
         AfkPlayer afkPlayer = (AfkPlayer) player;
         int timeoutSeconds = Config.PacketOptions.timeoutSeconds;
-        if (afkPlayer.stuff$isAfk() || timeoutSeconds <= 0) return;
+        if (afkPlayer.pipo$isAfk() || timeoutSeconds <= 0) return;
         if (!lastActiveTime.containsKey(player.getUuid())) return;
         long afkDuration = System.currentTimeMillis() - lastActiveTime.get(player.getUuid());
         if (afkDuration > timeoutSeconds * 1000L) {
-            afkPlayer.stuff$enableAfk();
+            afkPlayer.pipo$enableAfk();
         }
     }
 

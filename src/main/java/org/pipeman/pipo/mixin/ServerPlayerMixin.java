@@ -34,18 +34,18 @@ public abstract class ServerPlayerMixin extends Entity implements AfkPlayer {
     }
 
     @Unique
-    public boolean stuff$isAfk() {
+    public boolean pipo$isAfk() {
         return this.isAfk;
     }
 
     @Unique
-    public void stuff$enableAfk() {
-        if (stuff$isAfk()) return;
+    public void pipo$enableAfk() {
+        if (this.pipo$isAfk()) return;
         setAfk(true);
     }
 
     @Unique
-    public void stuff$disableAfk() {
+    public void pipo$disableAfk() {
         if (!isAfk) return;
         lastActiveTime.put(player.getUuid(), System.currentTimeMillis());
         setAfk(false);
@@ -58,7 +58,7 @@ public abstract class ServerPlayerMixin extends Entity implements AfkPlayer {
 
     @Inject(method = "updateLastActionTime", at = @At("TAIL"))
     private void onActionTimeUpdate(CallbackInfo ci) {
-        stuff$disableAfk();
+        this.pipo$disableAfk();
     }
 
     public void setPosition(double x, double y, double z) {

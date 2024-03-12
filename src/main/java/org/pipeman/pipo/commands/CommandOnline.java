@@ -31,7 +31,7 @@ public class CommandOnline {
             player = MinecraftServerSupplier.getServer().getPlayerManager().getPlayer(name);
             afkPlayer = (AfkPlayer) player;
 
-            if (afkPlayer.stuff$isAfk()) {
+            if (afkPlayer.pipo$isAfk()) {
                 name = "_" + name + "_";
             }
 
