@@ -41,18 +41,18 @@ public abstract class ServerPlayerMixin extends Entity implements AfkPlayer {
     @Unique
     public void pipo$enableAfk() {
         if (this.pipo$isAfk()) return;
-        setAfk(true);
+        pipo$setAfk(true);
     }
 
     @Unique
     public void pipo$disableAfk() {
         if (!isAfk) return;
         lastActiveTime.put(player.getUuid(), System.currentTimeMillis());
-        setAfk(false);
+        pipo$setAfk(false);
     }
 
     @Unique
-    private void setAfk(boolean isAfk) {
+    private void pipo$setAfk(boolean isAfk) {
         this.isAfk = isAfk;
     }
 
