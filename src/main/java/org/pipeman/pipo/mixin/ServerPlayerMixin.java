@@ -25,9 +25,9 @@ public abstract class ServerPlayerMixin extends Entity implements AfkPlayer {
     @Final
     public MinecraftServer server;
     @Unique
-    public ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
+    public ServerPlayerEntity pipo$player = (ServerPlayerEntity) (Object) this;
     @Unique
-    private boolean isAfk;
+    private boolean pipo$isAfk;
 
     public ServerPlayerMixin(EntityType<?> type, World world) {
         super(type, world);
@@ -35,7 +35,7 @@ public abstract class ServerPlayerMixin extends Entity implements AfkPlayer {
 
     @Unique
     public boolean pipo$isAfk() {
-        return this.isAfk;
+        return this.pipo$isAfk;
     }
 
     @Unique
@@ -46,14 +46,14 @@ public abstract class ServerPlayerMixin extends Entity implements AfkPlayer {
 
     @Unique
     public void pipo$disableAfk() {
-        if (!isAfk) return;
-        lastActiveTime.put(player.getUuid(), System.currentTimeMillis());
+        if (!pipo$isAfk) return;
+        lastActiveTime.put(pipo$player.getUuid(), System.currentTimeMillis());
         pipo$setAfk(false);
     }
 
     @Unique
     private void pipo$setAfk(boolean isAfk) {
-        this.isAfk = isAfk;
+        this.pipo$isAfk = isAfk;
     }
 
     @Inject(method = "updateLastActionTime", at = @At("TAIL"))
@@ -63,7 +63,7 @@ public abstract class ServerPlayerMixin extends Entity implements AfkPlayer {
 
     public void setPosition(double x, double y, double z) {
         if (Config.PacketOptions.resetOnMovement && (this.getX() != x || this.getY() != y || this.getZ() != z)) {
-            player.updateLastActionTime();
+            pipo$player.updateLastActionTime();
         }
         super.setPosition(x, y, z);
     }
