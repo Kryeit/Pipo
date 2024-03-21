@@ -163,15 +163,15 @@ public class Utils {
     }
 
     public static void addGroup(UUID id, String permission) {
-        LuckPermsProvider.get().getUserManager().modifyUser(id, user -> {
-            user.data().add(Node.builder("group." + permission).build());
-        });
+        LuckPermsProvider.get().getUserManager().modifyUser(id, user ->
+            user.data().add(Node.builder("group." + permission).build())
+        );
     }
 
     public static void removeGroup(UUID id, String permission) {
-        LuckPermsProvider.get().getUserManager().modifyUser(id, user -> {
-            user.data().remove(Node.builder("group." + permission).build());
-        });
+        LuckPermsProvider.get().getUserManager().modifyUser(id, user ->
+            user.data().remove(Node.builder("group." + permission).build())
+        );
     }
 
     public static UUID getPlayerLinked(Member member) {
