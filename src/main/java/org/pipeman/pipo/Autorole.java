@@ -36,7 +36,7 @@ public class Autorole extends TimerTask {
         Offlines.getPlayerNames().stream().iterator().forEachRemaining(name -> {
             UUID id = Offlines.getUUIDbyName(name).orElse(null);
             if (id == null) return;
-            if (Pipo.getInstance().discordRegistry.hasPlayer(id)) {
+            if (!Pipo.getInstance().discordRegistry.hasPlayer(id)) {
                 Utils.isPlayerOnGroup(id, role.getName().toLowerCase()).thenAcceptAsync(result -> {
                     if (result)
                         Utils.removeGroup(id, role.getName().toLowerCase());
