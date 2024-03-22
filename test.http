@@ -1,0 +1,24 @@
+GET http://localhost:8080/api/players?query=muri
+
+###
+
+GET http://localhost:8080/api/players/MuriPlz
+
+###
+
+GET http://localhost:8080/api/players/MuriPlz/skin
+
+###
+
+GET http://localhost:8080/api/bans
+
+###
+
+GET http://localhost:8080/api/leaderboard
+
+###
+
+GET http://localhost:8080/api/leaderboard?offset=0&limit=20&order-by=last-played&sort-direction=ASC
+# "playtime", "last-played", "distance-walked", "deaths", "mob-kills"
+
+###
