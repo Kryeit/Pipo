@@ -33,7 +33,7 @@ public class CommandOnline {
 
             if (afkPlayer != null) {
                 if (afkPlayer.pipo$isAfk()) {
-                    name = "-" + name + "-";
+                    name = "~~" + name + "~~";
                 }
             }
 
