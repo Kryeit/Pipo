@@ -1,5 +1,6 @@
 package org.pipeman.pipo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.pipeman.pipo.Leaderboard.LeaderboardEntry.Value;
 import org.pipeman.pipo.offline.Offlines;
 import org.pipeman.pipo.offline.OfflinesStats;
@@ -32,6 +33,14 @@ public class Leaderboard {
         }
         list.sort(order.comparator());
         return list;
+    }
+
+    public static int getTotalCount() {
+        int total = 0;
+        for (String playerName : Offlines.getPlayerNames()) {
+            if (playerName != null) total++;
+        }
+        return total;
     }
 
     public static int getRank(String playerName) {
@@ -86,6 +95,7 @@ public class Leaderboard {
                 return rawValue;
             }
 
+            @JsonProperty("value")
             public String formatted() {
                 return formatted;
             }

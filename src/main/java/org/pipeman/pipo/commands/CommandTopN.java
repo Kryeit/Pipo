@@ -58,7 +58,7 @@ public class CommandTopN {
         for (LeaderboardEntry le : entries) {
             String newLine = MessageFormat.format(
                     "**{0}:** {1} ({2})\n",
-                    rank, escapeName(le.name()), le.value().formatted()
+                    rank, Utils.escapeName(le.name()), le.value().formatted()
             );
             if (newLine.length() + content.length() > MessageEmbed.VALUE_MAX_LENGTH) break;
 
@@ -71,9 +71,5 @@ public class CommandTopN {
                 .setColor(new Color(59, 152, 0))
                 .build();
         event.getHook().editOriginalEmbeds(embed).queue();
-    }
-
-    private static String escapeName(String name) {
-        return name.replace("_", "\\_");
     }
 }

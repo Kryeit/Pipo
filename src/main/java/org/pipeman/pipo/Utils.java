@@ -12,6 +12,8 @@ import net.minecraft.util.Identifier;
 import org.json.JSONObject;
 import org.pipeman.pipo.offline.Offlines;
 import org.pipeman.pipo.offline.OfflinesStats;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -29,6 +31,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 public class Utils {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Utils.class);
     private static final HttpClient CLIENT = HttpClient.newHttpClient();
 
     public static byte[] getSkin(String name) {
@@ -40,9 +43,7 @@ public class Utils {
                     ).body()
             ).getString("id");
 
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid))
-                    .build();
+            HttpRequest request = HttpRequest.newBuilder(URI.create("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid)).build();
 
             String body = CLIENT.send(request, HttpResponse.BodyHandlers.ofString()).body();
             JSONObject data = new JSONObject(body);
@@ -59,7 +60,8 @@ public class Utils {
             ImageIO.write(scaleImage(output, 32), "png", out);
 
             return out.toByteArray();
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            LOGGER.error("Failed to download skin", e);
             return new byte[0];
         }
     }
@@ -92,8 +94,6 @@ public class Utils {
                 out.setRGB(xI + destX, yI + destY, rgb);
             }
         }
-
-        // titel, schulfach, datei
     }
 
     public static double round(double value, int precision) {
@@ -118,6 +118,14 @@ public class Utils {
         return out;
     }
 
+    public static <T, R> List<T> map(R[] list, Function<R, T> mappingFunction) {
+        List<T> out = new ArrayList<>();
+        for (R r : list) {
+            out.add(mappingFunction.apply(r));
+        }
+        return out;
+    }
+
     public static MessageEmbed createErrorEmbed(String error) {
         return new EmbedBuilder()
                 .setTitle("Error")
@@ -127,23 +135,24 @@ public class Utils {
     }
 
     public static long getPlaytime(String name) {
-
         Optional<UUID> id = Offlines.getUUIDbyName(name);
-        if (id.isEmpty()) return 0;
-    //    long afkTime = AFK_PLUS.getPlayer(player).getTotalTimeAFK() / 1000;
-        Stat<Identifier> stat = Stats.CUSTOM.getOrCreateStat(Stats.PLAY_TIME);
-        long playtime = OfflinesStats.getPlayerStat("play_time", id.get()) / 20;
-    //    return Math.max(0, playtime - afkTime);
+        return id.map(Utils::getPlaytime).orElse(0L);
+    }
+
+    public static long getPlaytime(UUID uuid) {
+        //    long afkTime = AFK_PLUS.getPlayer(player).getTotalTimeAFK() / 1000;
+//        Stat<Identifier> stat = Stats.CUSTOM.getOrCreateStat(Stats.PLAY_TIME);
+        long playtime = OfflinesStats.getPlayerStat("play_time", uuid) / 20;
+        //    return Math.max(0, playtime - afkTime);
         return Math.max(0, playtime);
     }
 
-    public static long getLastPlayed(String name) {
-        Optional<UUID> id = Offlines.getUUIDbyName(name);
-        return id.map(uuid -> Pipo.getInstance().lastTimePlayed.getElement(uuid) * 1000).orElse(-1L);
+    public static long getLastPlayed(UUID uuid) {
+        return Pipo.getInstance().lastTimePlayed.getElement(uuid) * 1000;
     }
 
     public static boolean isOnline(String name) {
-        return Arrays.asList(MinecraftServerSupplier.getServer().getPlayerNames()).contains(name);
+        return List.of(MinecraftServerSupplier.getServer().getPlayerNames()).contains(name);
     }
 
     public static int getOnlinePlayersSize() {
@@ -164,17 +173,33 @@ public class Utils {
 
     public static void addGroup(UUID id, String permission) {
         LuckPermsProvider.get().getUserManager().modifyUser(id, user ->
-            user.data().add(Node.builder("group." + permission).build())
+                user.data().add(Node.builder("group." + permission).build())
         );
     }
 
     public static void removeGroup(UUID id, String permission) {
         LuckPermsProvider.get().getUserManager().modifyUser(id, user ->
-            user.data().remove(Node.builder("group." + permission).build())
+                user.data().remove(Node.builder("group." + permission).build())
         );
     }
 
     public static UUID getPlayerLinked(Member member) {
         return Pipo.getInstance().discordRegistry.getPlayerUuid(member.getId()).orElse(null);
+    }
+
+    public static String escapeName(String name) {
+        return name.replace("_", "\\_");
+    }
+
+    public static List<String> getNameSuggestions(String input) {
+        input = input.toLowerCase();
+        List<String> players = new ArrayList<>();
+        for (String name : Offlines.getPlayerNames()) {
+            if (players.size() >= 5) break;
+            if (name != null && name.toLowerCase().contains(input) && !players.contains(name)) {
+                players.add(name);
+            }
+        }
+        return players;
     }
 }

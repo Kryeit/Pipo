@@ -10,8 +10,8 @@ import java.util.Properties;
 import java.util.UUID;
 
 public class LastTimePlayed {
-    private File file;
-    private Properties properties;
+    private final File file;
+    private final Properties properties;
 
     public LastTimePlayed(String filePath) throws IOException {
         this.file = new File(filePath);
@@ -62,7 +62,7 @@ public class LastTimePlayed {
     }
 
     public long getElement(UUID playerID) {
-        return getHashMap().containsKey(playerID) ? getHashMap().get(playerID) : 0;
+        return getHashMap().getOrDefault(playerID, 0L);
     }
 }
 

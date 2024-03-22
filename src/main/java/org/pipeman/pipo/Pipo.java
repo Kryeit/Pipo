@@ -20,6 +20,7 @@ import org.pipeman.pipo.listener.discord.DirectMessageListener;
 import org.pipeman.pipo.listener.discord.DownloadModsListener;
 import org.pipeman.pipo.listener.minecraft.PlayerLogin;
 import org.pipeman.pipo.listener.minecraft.PlayerQuit;
+import org.pipeman.pipo.rest.RestApiServer;
 import org.pipeman.pipo.storage.LastTimePlayed;
 import org.pipeman.pipo.storage.PlayerDiscordRegistry;
 
@@ -27,16 +28,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
-import java.util.Timer;
 import java.util.UUID;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public final class Pipo implements DedicatedServerModInitializer {
-    private static final Timer KRYEITOR_TIMER = new Timer(true);
-    private static final Timer COLLABORATOR_TIMER = new Timer(true);
-    private static final Timer BOOSTER_TIMER = new Timer(true);
-
     public static JDA JDA;
     public final static String KRYEIT_GUILD = "910626990468497439";
     public LastTimePlayed lastTimePlayed;
@@ -48,20 +44,15 @@ public final class Pipo implements DedicatedServerModInitializer {
     @Override
     public void onInitializeServer() {
         instance = this;
+        new RestApiServer();
         CommandLinkDiscord.codes = new HashMap<>();
-
 
         try {
             lastTimePlayed = new LastTimePlayed("mods/pipo/last_time_played");
             discordRegistry = new PlayerDiscordRegistry("mods/pipo", "discord_registry.properties");
 
-            InputStream in = this.getClass().getResourceAsStream("/secret.txt");
-            if (in == null) {
-                throw new FileNotFoundException("Resource not found: secret.txt");
-            }
-            String token = new String(in.readAllBytes()).trim();
-            in.close();
-            JDA = JDABuilder.createDefault(token)
+
+            JDA = JDABuilder.createDefault(readToken())
                     .setActivity(Activity.watching("0 players"))
                     .enableIntents(GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_MEMBERS)
                     .build();
@@ -71,7 +62,7 @@ public final class Pipo implements DedicatedServerModInitializer {
             JDA.addEventListener(new DirectMessageListener());
 
             JDA.awaitReady();
-        } catch (InterruptedException | IOException e) {
+        } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
 
@@ -156,4 +147,12 @@ public final class Pipo implements DedicatedServerModInitializer {
         executor.scheduleAtFixedRate(new Autorole(JDA.getRoleById(Autorole.BOOSTER)), 5, 5, TimeUnit.MINUTES);
     }
 
+    private String readToken() throws IOException {
+        try (InputStream in = this.getClass().getResourceAsStream("/secret.txt")) {
+            if (in == null) {
+                throw new FileNotFoundException("Resource not found: secret.txt");
+            }
+            return new String(in.readAllBytes()).trim();
+        }
+    }
 }
