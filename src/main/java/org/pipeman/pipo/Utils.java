@@ -35,6 +35,7 @@ public class Utils {
     private static final HttpClient CLIENT = HttpClient.newHttpClient();
 
     public static byte[] getSkin(String name) {
+        // TODO get UUID from server's uuid cache to circumvent rate-limiting
         try {
             String uuid = new JSONObject(
                     CLIENT.send(

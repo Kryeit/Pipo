@@ -20,7 +20,7 @@ public record BanStatus(
         BannedPlayerEntry banEntry = banList.get(new GameProfile(uuid, playerName));
 
         if (banEntry == null) return null;
-        return new BanStatus(banEntry.getReason(), playerName, banEntry.getCreationDate(), banEntry.getExpiryDate());
+        return new BanStatus(playerName, banEntry.getReason(), banEntry.getCreationDate(), banEntry.getExpiryDate());
     }
 
     public static BanStatus ofPlayer(String playerName) {
