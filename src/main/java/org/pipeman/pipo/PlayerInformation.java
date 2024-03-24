@@ -9,12 +9,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 public record PlayerInformation(
-        int rank,
-        long playtime,
-        long lastSeen,
-        boolean online,
+        @JsonSerialize int rank,
+        @JsonSerialize long playtime,
+        @JsonSerialize long lastSeen,
+        @JsonSerialize boolean online,
         @JsonSerialize(using = OptionalSerializer.class) Optional<Integer> totalClaimBlocks,
-        BanStatus banStatus
+        @JsonSerialize BanStatus banStatus
 ) {
 
     public static Optional<PlayerInformation> of(String playerName) {

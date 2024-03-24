@@ -1,5 +1,6 @@
 package org.pipeman.pipo;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.server.BannedPlayerEntry;
 import net.minecraft.server.BannedPlayerList;
@@ -10,10 +11,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 public record BanStatus(
-        String playerName,
-        String reason,
-        Date creationDate,
-        Date expiryDate
+        @JsonSerialize String playerName,
+        @JsonSerialize String reason,
+        @JsonSerialize Date creationDate,
+        @JsonSerialize Date expiryDate
 ) {
     public static BanStatus ofPlayer(UUID uuid, String playerName) {
         BannedPlayerList banList = MinecraftServerSupplier.getServer().getPlayerManager().getUserBanList();
