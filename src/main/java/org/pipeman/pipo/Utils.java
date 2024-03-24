@@ -6,9 +6,6 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.model.group.Group;
 import net.luckperms.api.node.Node;
-import net.minecraft.stat.Stat;
-import net.minecraft.stat.Stats;
-import net.minecraft.util.Identifier;
 import org.json.JSONObject;
 import org.pipeman.pipo.offline.Offlines;
 import org.pipeman.pipo.offline.OfflinesStats;
@@ -35,16 +32,11 @@ public class Utils {
     private static final HttpClient CLIENT = HttpClient.newHttpClient();
 
     public static byte[] getSkin(String name) {
-        // TODO get UUID from server's uuid cache to circumvent rate-limiting
         try {
-            String uuid = new JSONObject(
-                    CLIENT.send(
-                            HttpRequest.newBuilder(URI.create("https://api.mojang.com/users/profiles/minecraft/" + name)).build(),
-                            HttpResponse.BodyHandlers.ofString()
-                    ).body()
-            ).getString("id");
+            Optional<UUID> uuid = Offlines.getUUIDbyName(name);
+            if (uuid.isEmpty()) return new byte[0];
 
-            HttpRequest request = HttpRequest.newBuilder(URI.create("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid)).build();
+            HttpRequest request = HttpRequest.newBuilder(URI.create("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.get())).build();
 
             String body = CLIENT.send(request, HttpResponse.BodyHandlers.ofString()).body();
             JSONObject data = new JSONObject(body);
