@@ -40,76 +40,76 @@ public final class Pipo implements DedicatedServerModInitializer {
     public static Pipo instance;
 
     public static HashMap<UUID, Long> lastActiveTime = new HashMap<>();
+    private RestApiServer restApiServer;
 
     @Override
     public void onInitializeServer() {
         instance = this;
-        new RestApiServer();
         CommandLinkDiscord.codes = new HashMap<>();
+        restApiServer = new RestApiServer();
 
         try {
             lastTimePlayed = new LastTimePlayed("mods/pipo/last_time_played");
             discordRegistry = new PlayerDiscordRegistry("mods/pipo", "discord_registry.properties");
-//
-//
-//            JDA = JDABuilder.createDefault(readToken())
-//                    .setActivity(Activity.watching("0 players"))
-//                    .enableIntents(GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_MEMBERS)
-//                    .build();
-//
-//            JDA.addEventListener(new CommandListener());
-//            JDA.addEventListener(new DownloadModsListener());
-//            JDA.addEventListener(new DirectMessageListener());
-//
-//            JDA.awaitReady();
-        } catch (IOException e) {
+
+            JDA = JDABuilder.createDefault(readToken())
+                    .setActivity(Activity.watching("0 players"))
+                    .enableIntents(GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_MEMBERS)
+                    .build();
+
+            JDA.addEventListener(new CommandListener());
+            JDA.addEventListener(new DownloadModsListener());
+            JDA.addEventListener(new DirectMessageListener());
+
+            JDA.awaitReady();
+        } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
-//
-//        Guild guild = JDA.getGuildById(KRYEIT_GUILD);
-//        if (guild != null) {
-//
-//            guild.upsertCommand("tps", "Returns current TPS")
-//                    .queue();
-//
-//            guild.upsertCommand("online", "Returns currently online players")
-//                    .queue();
-//
-//            guild.upsertCommand("playerinfo", "Returns playtime information about the provided user")
-//                    .addOption(OptionType.STRING, "playername", "The player's name", true, true)
-//                    .queue();
-//
-//            guild.upsertCommand("top-10", "Returns a top-10 list of the most active users")
-//                    .queue();
-//
-//            guild.upsertCommand("mods", "Returns instructions on how to join the server")
-//                    .queue();
-//
-//            guild.upsertCommand("top-n", "Returns a list of the most active users. Limit and offset can be specified")
-//                    .addOption(OptionType.INTEGER, "limit", "Limit of elements to return", true)
-//                    .addOption(OptionType.INTEGER, "offset", "Offset of the returned elements in the list", true)
-//
-//                    .addOptions(new OptionData(OptionType.STRING, "order-by", "Order by statistic (The playtime is used if omitted)", false)
-//                            .addChoice("playtime", "playtime")
-//                            .addChoice("last-played", "last-played")
-//                            .addChoice("distance-walked", "distance-walked")
-//                            .addChoice("deaths", "deaths")
-//                            .addChoice("mob-kills", "mob-kills")
-//                    )
-//                    .addOptions(new OptionData(OptionType.STRING, "sort-direction", "Sorting direction (descending is used if omitted)", false)
-//                            .addChoice("ascending", "ascending")
-//                            .addChoice("descending", "descending")
-//                    )
-//                    .queue();
-//        } else {
-//            System.out.println("Guild is null!");
-//        }
-//
-//        registerEvents();
-//        registerCommands();
-//        registerDisableEvent();
-//
-//        scheduleTimers();
+
+        Guild guild = JDA.getGuildById(KRYEIT_GUILD);
+        if (guild != null) {
+
+            guild.upsertCommand("tps", "Returns current TPS")
+                    .queue();
+
+            guild.upsertCommand("online", "Returns currently online players")
+                    .queue();
+
+            guild.upsertCommand("playerinfo", "Returns playtime information about the provided user")
+                    .addOption(OptionType.STRING, "playername", "The player's name", true, true)
+                    .queue();
+
+            guild.upsertCommand("top-10", "Returns a top-10 list of the most active users")
+                    .queue();
+
+            guild.upsertCommand("mods", "Returns instructions on how to join the server")
+                    .queue();
+
+            guild.upsertCommand("top-n", "Returns a list of the most active users. Limit and offset can be specified")
+                    .addOption(OptionType.INTEGER, "limit", "Limit of elements to return", true)
+                    .addOption(OptionType.INTEGER, "offset", "Offset of the returned elements in the list", true)
+
+                    .addOptions(new OptionData(OptionType.STRING, "order-by", "Order by statistic (The playtime is used if omitted)", false)
+                            .addChoice("playtime", "playtime")
+                            .addChoice("last-played", "last-played")
+                            .addChoice("distance-walked", "distance-walked")
+                            .addChoice("deaths", "deaths")
+                            .addChoice("mob-kills", "mob-kills")
+                    )
+                    .addOptions(new OptionData(OptionType.STRING, "sort-direction", "Sorting direction (descending is used if omitted)", false)
+                            .addChoice("ascending", "ascending")
+                            .addChoice("descending", "descending")
+                    )
+                    .queue();
+        } else {
+            System.out.println("Guild is null!");
+        }
+
+        registerEvents();
+        registerCommands();
+        registerDisableEvent();
+
+        scheduleTimers();
     }
 
     public void registerCommands() {
@@ -123,6 +123,8 @@ public final class Pipo implements DedicatedServerModInitializer {
     public void registerDisableEvent() {
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
             JDA.shutdown();
+            restApiServer.stop();
+            restApiServer = null;
             JDA = null;
         });
     }

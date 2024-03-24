@@ -25,7 +25,8 @@ public class RestApiServer {
                     get("leaderboard", LeaderboardApi::getLeaderboard);
                 });
             });
-        }).start(8080);
+        });
+        new Thread(() -> javalin.start(4001)).start();
     }
 
     public void stop() {
