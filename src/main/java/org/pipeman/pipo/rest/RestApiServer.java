@@ -23,6 +23,7 @@ public class RestApiServer {
                     });
                     get("bans", BanApi::getBans);
                     get("leaderboard", LeaderboardApi::getLeaderboard);
+                    get("online", OnlineApi::getOnlinePlayers);
                 });
             });
         });
