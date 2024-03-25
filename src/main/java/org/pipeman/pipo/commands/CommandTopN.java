@@ -17,7 +17,7 @@ public class CommandTopN {
     public static void handle(SlashCommandInteractionEvent event) {
         int limit = event.getOption("limit", 10, OptionMapping::getAsInt);
         int offset = event.getOption("offset", 0, OptionMapping::getAsInt);
-        boolean sortDescending = event.getOption("sort-direction", true, OptionMapping::getAsBoolean);
+        boolean sortDescending = event.getOption("sort-direction", "ascending", OptionMapping::getAsString).equals("descending");
         String orderBy = event.getOption("order-by", "playtime", OptionMapping::getAsString);
 
         if (limit < 1) {

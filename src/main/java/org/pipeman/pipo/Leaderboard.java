@@ -1,6 +1,8 @@
 package org.pipeman.pipo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.pipeman.pipo.Leaderboard.LeaderboardEntry.Value;
 import org.pipeman.pipo.offline.Offlines;
 import org.pipeman.pipo.offline.OfflinesStats;
@@ -53,11 +55,12 @@ public class Leaderboard {
     }
 
     // This is so ugly
-    public record LeaderboardEntry(Value value, String name) {
+    public record LeaderboardEntry(@JsonUnwrapped Value value, @JsonSerialize String name) {
         public static class Value {
             private static final DateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
 
             private final long rawValue;
+            @JsonProperty("value")
             private final String formatted;
 
             public Value(String name, String playerName) {
@@ -95,7 +98,6 @@ public class Leaderboard {
                 return rawValue;
             }
 
-            @JsonProperty("value")
             public String formatted() {
                 return formatted;
             }
