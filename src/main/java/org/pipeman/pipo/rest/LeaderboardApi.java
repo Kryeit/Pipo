@@ -30,7 +30,7 @@ public class LeaderboardApi {
 
     private static Order getOrder(Context ctx) {
         String orderParam = ctx.queryParam("sort-direction");
-        if (orderParam == null) return Order.ASC;
+        if (orderParam == null) return Order.DESC;
 
         return switch (orderParam) {
             case "ASC" -> Order.ASC;
