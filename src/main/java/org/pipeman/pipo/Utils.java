@@ -16,7 +16,9 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 import java.net.http.HttpClient;
@@ -31,6 +33,24 @@ public class Utils {
     private static final Logger LOGGER = LoggerFactory.getLogger(Utils.class);
     private static final HttpClient CLIENT = HttpClient.newHttpClient();
 
+    public static byte[] getHeadSkin(String name) {
+        try {
+            BufferedImage image = ImageIO.read(new ByteArrayInputStream(getSkin(name)));
+            BufferedImage output = new BufferedImage(8, 8, Image.SCALE_FAST);
+
+            copyRect(image, output, 8, 8, 8, 8, 0, 0);
+            copyRect(image, output, 40, 8, 8, 8, 0, 0);
+
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            ImageIO.write(scaleImage(output, 32), "png", out);
+
+            return out.toByteArray();
+        } catch (Exception e) {
+            LOGGER.error("Failed to download skin", e);
+            return new byte[0];
+        }
+    }
+
     public static byte[] getSkin(String name) {
         try {
             Optional<UUID> uuid = Offlines.getUUIDbyName(name);
@@ -43,16 +63,9 @@ public class Utils {
             byte[] decode = Base64.getDecoder().decode(data.getJSONArray("properties").getJSONObject(0).getString("value"));
             String url = new JSONObject(new String(decode)).getJSONObject("textures").getJSONObject("SKIN").getString("url");
 
-            BufferedImage image = ImageIO.read(new URL(url));
-            BufferedImage output = new BufferedImage(8, 8, Image.SCALE_FAST);
-
-            copyRect(image, output, 8, 8, 8, 8, 0, 0);
-            copyRect(image, output, 40, 8, 8, 8, 0, 0);
-
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            ImageIO.write(scaleImage(output, 32), "png", out);
-
-            return out.toByteArray();
+            try (InputStream stream = new URL(url).openStream()) {
+                return stream.readAllBytes();
+            }
         } catch (Exception e) {
             LOGGER.error("Failed to download skin", e);
             return new byte[0];

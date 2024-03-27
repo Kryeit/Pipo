@@ -85,7 +85,7 @@ public class CommandPlayerinfo {
 
         String filename = playerName.hashCode() + ".png";
         embedBuilder.setThumbnail("attachment://" + filename);
-        event.getHook().sendFiles(FileUpload.fromData(Utils.getSkin(playerName), filename))
+        event.getHook().sendFiles(FileUpload.fromData(Utils.getHeadSkin(playerName), filename))
                 .setEmbeds(embedBuilder.build())
                 .queue();
     }

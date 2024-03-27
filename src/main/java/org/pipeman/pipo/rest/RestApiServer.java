@@ -17,6 +17,7 @@ public class RestApiServer {
                     path("players", () -> {
                         path("{player}", () -> {
                             get(PlayerApi::getPlayerInfo);
+                            get("head", PlayerApi::getHeadSkin);
                             get("skin", PlayerApi::getSkin);
                         });
                         get("", PlayerApi::searchPlayerNames);

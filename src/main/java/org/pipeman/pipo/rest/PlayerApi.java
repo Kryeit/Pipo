@@ -24,6 +24,11 @@ public class PlayerApi {
         ctx.json(Utils.getNameSuggestions(query));
     }
 
+    public static void getHeadSkin(Context ctx) {
+        ctx.header(Header.CONTENT_TYPE, ContentType.IMAGE_PNG.getMimeType());
+        ctx.result(Utils.getHeadSkin(ctx.pathParam("player")));
+    }
+
     public static void getSkin(Context ctx) {
         ctx.header(Header.CONTENT_TYPE, ContentType.IMAGE_PNG.getMimeType());
         ctx.result(Utils.getSkin(ctx.pathParam("player")));
