@@ -10,6 +10,14 @@ GET http://localhost:8080/api/players/MuriPlz/skin
 
 ###
 
+GET http://localhost:8080/api/players/MuriPlz/head
+
+###
+
+GET http://localhost:8080/api/online
+
+###
+
 GET http://localhost:8080/api/bans
 
 ###
