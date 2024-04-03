@@ -68,6 +68,9 @@ public final class Pipo implements DedicatedServerModInitializer {
 
         Guild guild = JDA.getGuildById(KRYEIT_GUILD);
         if (guild != null) {
+            guild.upsertCommand("verify", "Connect your Minecraft account to your Discord account by typing /linkdiscord in the Minecraft chat")
+                    .addOption(OptionType.INTEGER, "code", "The code you received in Minecraft", true)
+                    .queue();
 
             guild.upsertCommand("tps", "Returns current TPS")
                     .queue();

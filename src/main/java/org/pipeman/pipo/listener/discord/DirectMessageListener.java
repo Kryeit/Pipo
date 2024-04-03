@@ -9,8 +9,6 @@ import org.pipeman.pipo.commands.minecraft.CommandLinkDiscord;
 public class DirectMessageListener extends ListenerAdapter {
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-
-
         if (event.getAuthor().isBot()) return; // Ignore messages from other bots
         if (!event.isFromType(ChannelType.PRIVATE)) return;
 

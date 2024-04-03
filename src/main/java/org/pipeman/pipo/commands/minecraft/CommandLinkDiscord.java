@@ -6,6 +6,7 @@ import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.pipeman.pipo.Pipo;
@@ -41,13 +42,12 @@ public class CommandLinkDiscord {
 
         codes.put(random4Digits, player.getUuid());
 
-        Text.literal("Send a private message (DM) to ").append(
-                Text.literal("Pipeman Bot").formatted(Formatting.GOLD)
-        ).append(
-                Text.literal(" with the following code: " + random4Digits).formatted(Formatting.WHITE)
-        );
+        MutableText message = Text.literal("Type")
+                .append(Text.literal(" /verify " + random4Digits)
+                        .formatted(Formatting.WHITE, Formatting.BOLD))
+                .append(" in any channel in the Kryeit Discord server (/discord)");
 
-        player.sendMessage(Text.literal("Send a private message to " + " with the following code: " + random4Digits));
+        player.sendMessage(message);
         return Command.SINGLE_SUCCESS;
     }
 

@@ -16,6 +16,7 @@ public class CommandListener extends ListenerAdapter {
             case "top-10" -> CommandTopN.handleTop10(event);
             case "top-n" -> CommandTopN.handle(event);
             case "mods" -> CommandMods.handle(event);
+            case "verify" -> CommandVerify.handle(event);
         }
     }
 
