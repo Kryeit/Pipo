@@ -33,7 +33,7 @@ public class CommandPlayerinfo {
             }
         }
         EmbedBuilder embedBuilder = new EmbedBuilder();
-        embedBuilder.setTitle(playerName);
+        embedBuilder.setTitle(Utils.escapeName(playerName));
         embedBuilder.setColor(new Color(59, 152, 0));
 
         event.deferReply().queue();
