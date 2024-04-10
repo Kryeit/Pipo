@@ -8,9 +8,4 @@ public class Config {
         public static boolean resetOnMovement = true;
         public static boolean resetOnLook = true;
     }
-
-    public static class PlayerListOptions {
-        public static boolean enableListDisplay = true;
-        public static String afkColor = "gray";
-    }
 }

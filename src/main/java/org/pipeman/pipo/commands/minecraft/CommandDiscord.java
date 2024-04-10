@@ -12,7 +12,7 @@ import net.minecraft.text.Text;
 
 import java.util.function.Supplier;
 
-public class Discord {
+public class CommandDiscord {
     public static int execute(CommandContext<ServerCommandSource> context) {
         ServerCommandSource source = context.getSource();
         ServerPlayerEntity player = source.getPlayer();
@@ -30,7 +30,7 @@ public class Discord {
 
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(CommandManager.literal("discord")
-                .executes(Discord::execute)
+                .executes(CommandDiscord::execute)
         );
     }
 }

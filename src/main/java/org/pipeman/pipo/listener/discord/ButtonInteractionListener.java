@@ -38,17 +38,20 @@ public class ButtonInteractionListener extends ListenerAdapter {
 
     private void createTicketChannel(Guild guild, Category category, Member member, ButtonInteractionEvent event) {
         // Generate a unique name for the ticket channel
-        final String channelName = "ticket-" + System.currentTimeMillis(); // Simple example, consider a better naming scheme
+        int random4Digits = (int) (Math.random() * 9000) + 1000;
+        // Check if it already exists
+        if (category.getTextChannels().stream().anyMatch(channel -> channel.getName().equals("ticket-" + random4Digits))) {
+            createTicketChannel(guild, category, member, event);
+            return;
+        }
+        final String channelName = "ticket-" + random4Digits;
 
         // Create the channel with permissions
         category.createTextChannel(channelName).addPermissionOverride(member, EnumSet.of(Permission.VIEW_CHANNEL), null)
                 .addPermissionOverride(guild.getPublicRole(), null, EnumSet.of(Permission.VIEW_CHANNEL)) // Deny view to everyone else
                 .queue(channel -> {
-                    // Send a message in the new ticket channel
                     channel.sendMessage("Ticket created").queue();
 
-                    // Optionally, inform the user privately or in the original context
-                    // For simplicity, replying to the original button interaction
                     channel.createInvite().queue(invite -> {
                         try {
                             event.getHook().sendMessage("Ticket created. You can access it here: " + invite.getUrl()).setEphemeral(true).queue();

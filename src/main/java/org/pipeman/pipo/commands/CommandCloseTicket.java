@@ -34,7 +34,13 @@ public class CommandCloseTicket extends ListenerAdapter {
                 .filter(c -> c.getPermissionContainer().getPermissionOverride(member) != null)
                 .toList();
 
-        if (tickets.isEmpty()) {
+        GuildMessageChannel currentChannel = (GuildMessageChannel) event.getChannel();
+
+        if (tickets.contains(currentChannel)) {
+            // If the current channel is a ticket, close it directly
+            currentChannel.delete().queue();
+            event.reply("Your ticket has been closed.").setEphemeral(true).queue();
+        } else if (tickets.isEmpty()) {
             event.reply("You have no open tickets.").setEphemeral(true).queue();
         } else if (tickets.size() == 1) {
             // Close the single ticket
