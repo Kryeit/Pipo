@@ -48,7 +48,7 @@ public class ButtonInteractionListener extends ListenerAdapter {
 
         // Create the channel with permissions
         category.createTextChannel(channelName).addPermissionOverride(member, EnumSet.of(Permission.VIEW_CHANNEL), null)
-                .addPermissionOverride(guild.getPublicRole(), null, EnumSet.of(Permission.VIEW_CHANNEL)) // Deny view to everyone else
+                .addPermissionOverride(guild.getPublicRole(), null, EnumSet.of(Permission.VIEW_CHANNEL))
                 .queue(channel -> {
                     channel.sendMessage("Ticket created").queue();
 

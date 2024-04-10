@@ -21,6 +21,7 @@ public class CommandPlayerinfo {
     public static void handle(SlashCommandInteractionEvent event) {
         OptionMapping playerOption = event.getOption("playername");
         String playerName = playerOption == null ? null : playerOption.getAsString();
+        playerName = Offlines.getNameByUUID(Offlines.getUUIDbyName(playerName).orElse(null)).orElse(playerName);
 
         if (playerName == null || playerName.isEmpty()) {
 
