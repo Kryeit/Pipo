@@ -16,6 +16,7 @@ import org.pipeman.pipo.commands.CommandListener;
 import org.pipeman.pipo.commands.minecraft.CommandLinkDiscord;
 import org.pipeman.pipo.commands.minecraft.CommandUnlinkDiscord;
 import org.pipeman.pipo.commands.minecraft.Discord;
+import org.pipeman.pipo.listener.discord.ButtonInteractionListener;
 import org.pipeman.pipo.listener.discord.DirectMessageListener;
 import org.pipeman.pipo.listener.discord.DownloadModsListener;
 import org.pipeman.pipo.listener.minecraft.PlayerLogin;
@@ -60,6 +61,7 @@ public final class Pipo implements DedicatedServerModInitializer {
             JDA.addEventListener(new CommandListener());
             JDA.addEventListener(new DownloadModsListener());
             JDA.addEventListener(new DirectMessageListener());
+            JDA.addEventListener(new ButtonInteractionListener());
 
             JDA.awaitReady();
         } catch (IOException | InterruptedException e) {
@@ -68,6 +70,12 @@ public final class Pipo implements DedicatedServerModInitializer {
 
         Guild guild = JDA.getGuildById(KRYEIT_GUILD);
         if (guild != null) {
+            guild.upsertCommand("close", "Closes a ticket")
+                    .queue();
+
+            guild.upsertCommand("ticket", "Creates a ticket")
+                    .queue();
+
             guild.upsertCommand("verify", "Connect your Minecraft account to your Discord account by typing /linkdiscord in the Minecraft chat")
                     .addOption(OptionType.INTEGER, "code", "The code you received in Minecraft", true)
                     .queue();
