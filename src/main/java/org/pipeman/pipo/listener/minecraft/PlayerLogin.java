@@ -7,14 +7,19 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import org.pipeman.pipo.Pipo;
 import org.pipeman.pipo.Utils;
+import org.pipeman.pipo.tps.Lag;
+
+import java.text.DecimalFormat;
 
 public class PlayerLogin implements ServerPlayConnectionEvents.Join {
+    private static final DecimalFormat format = new DecimalFormat("#.##");
+
     @Override
     public void onPlayReady(ServerPlayNetworkHandler handler, PacketSender sender, MinecraftServer server) {
         if (Utils.getOnlinePlayersSize() == 1) {
-            Pipo.JDA.getPresence().setActivity(Activity.watching("1 player"));
+            Pipo.JDA.getPresence().setActivity(Activity.watching("1 player - " + format.format(Lag.getTPS()) + " TPS"));
         } else {
-            Pipo.JDA.getPresence().setActivity(Activity.watching(Utils.getOnlinePlayersSize() + 1 + " players"));
+            Pipo.JDA.getPresence().setActivity(Activity.watching(Utils.getOnlinePlayersSize() + 1 + " players - " + format.format(Lag.getTPS()) + " TPS"));
         }
     }
 }
