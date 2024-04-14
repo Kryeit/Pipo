@@ -70,6 +70,9 @@ public final class Pipo implements DedicatedServerModInitializer {
 
         Guild guild = JDA.getGuildById(KRYEIT_GUILD);
         if (guild != null) {
+            guild.upsertCommand("nickname", "Changes your nickname to your Minecraft name")
+                    .queue();
+
             guild.upsertCommand("close", "Closes a ticket")
                     .queue();
 

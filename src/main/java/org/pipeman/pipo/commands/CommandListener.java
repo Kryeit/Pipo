@@ -19,6 +19,7 @@ public class CommandListener extends ListenerAdapter {
             case "verify" -> CommandVerify.handle(event);
             case "ticket" -> CommandTicket.handle(event);
             case "close" -> CommandCloseTicket.handle(event);
+            case "nickname" -> CommandNickname.handle(event);
         }
     }
 
