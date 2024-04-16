@@ -32,7 +32,14 @@ public class ButtonInteractionListener extends ListenerAdapter {
                 createTicketChannel(guild, createdCategory, member, event);
             });
         } else {
-            createTicketChannel(guild, category, member, event);
+            // Check if the member already has a ticket
+            boolean hasTicket = category.getTextChannels().stream()
+                    .anyMatch(channel -> channel.getPermissionOverride(member) != null && channel.getPermissionOverride(member).getAllowed().contains(Permission.VIEW_CHANNEL));
+            if (hasTicket) {
+                event.getHook().sendMessage("You already have a ticket created.").setEphemeral(true).queue();
+            } else {
+                createTicketChannel(guild, category, member, event);
+            }
         }
     }
 
