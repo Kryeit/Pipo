@@ -21,6 +21,7 @@ import org.pipeman.pipo.listener.discord.DirectMessageListener;
 import org.pipeman.pipo.listener.discord.DownloadModsListener;
 import org.pipeman.pipo.listener.minecraft.PlayerLogin;
 import org.pipeman.pipo.listener.minecraft.PlayerQuit;
+import org.pipeman.pipo.listener.minecraft.ServerStarted;
 import org.pipeman.pipo.rest.RestApiServer;
 import org.pipeman.pipo.storage.LastTimePlayed;
 import org.pipeman.pipo.storage.PlayerDiscordRegistry;
@@ -146,6 +147,7 @@ public final class Pipo implements DedicatedServerModInitializer {
     public void registerEvents() {
         ServerPlayConnectionEvents.JOIN.register(new PlayerLogin());
         ServerPlayConnectionEvents.DISCONNECT.register(new PlayerQuit());
+        ServerLifecycleEvents.SERVER_STARTED.register(new ServerStarted());
     }
 
     public static boolean isMe(ISnowflake user) {
