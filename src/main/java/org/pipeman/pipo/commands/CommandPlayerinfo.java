@@ -34,7 +34,7 @@ public class CommandPlayerinfo {
             }
         }
         EmbedBuilder embedBuilder = new EmbedBuilder();
-        embedBuilder.setTitle(Utils.escapeName(playerName));
+        embedBuilder.setTitle(Utils.escapeName(playerName), "https://kryeit.com/@" + playerName);
         embedBuilder.setColor(new Color(59, 152, 0));
 
         event.deferReply().queue();
