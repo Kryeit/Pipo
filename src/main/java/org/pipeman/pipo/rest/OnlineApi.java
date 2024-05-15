@@ -28,6 +28,7 @@ public class OnlineApi {
     public static void wsConnect(WsConnectContext ctx) {
         ctx.enableAutomaticPings();
         connections.add(ctx);
+        ctx.send(getOnlinePlayers());
     }
 
     public static void wsClose(WsCloseContext ctx) {
