@@ -2,8 +2,7 @@ package org.pipeman.pipo.rest;
 
 import io.javalin.Javalin;
 
-import static io.javalin.apibuilder.ApiBuilder.get;
-import static io.javalin.apibuilder.ApiBuilder.path;
+import static io.javalin.apibuilder.ApiBuilder.*;
 
 public class RestApiServer {
     private final Javalin javalin;
@@ -25,6 +24,11 @@ public class RestApiServer {
                     get("bans", BanApi::getBans);
                     get("leaderboard", LeaderboardApi::getLeaderboard);
                     get("online", OnlineApi::getOnlinePlayers);
+                    ws("live", c -> {
+                        c.onConnect(OnlineApi::wsConnect);
+                        c.onClose(OnlineApi::wsClose
+                        );
+                    });
                 });
             });
         });

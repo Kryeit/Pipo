@@ -7,6 +7,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.World;
 import org.pipeman.pipo.afk.AfkPlayer;
 import org.pipeman.pipo.afk.Config;
+import org.pipeman.pipo.rest.OnlineApi;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -54,6 +55,7 @@ public abstract class ServerPlayerMixin extends Entity implements AfkPlayer {
     @Unique
     private void pipo$setAfk(boolean isAfk) {
         this.pipo$isAfk = isAfk;
+        OnlineApi.broadcastChange();
     }
 
     @Inject(method = "updateLastActionTime", at = @At("TAIL"))

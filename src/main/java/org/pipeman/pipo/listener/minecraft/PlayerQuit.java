@@ -6,6 +6,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import org.pipeman.pipo.Pipo;
 import org.pipeman.pipo.Utils;
+import org.pipeman.pipo.rest.OnlineApi;
 import org.pipeman.pipo.tps.Lag;
 
 import java.io.IOException;
@@ -16,6 +17,7 @@ public class PlayerQuit implements ServerPlayConnectionEvents.Disconnect {
 
     @Override
     public void onPlayDisconnect(ServerPlayNetworkHandler handler, MinecraftServer server) {
+        OnlineApi.broadcastChange();
         try {
             Pipo.getInstance().lastTimePlayed.addElement(handler.player.getUuid(), System.currentTimeMillis() / 1000);
         } catch (IOException e) {

@@ -208,4 +208,13 @@ public class Utils {
         }
         return players;
     }
+
+    public static TimerTask timerTask(Runnable runnable) {
+        return new TimerTask() {
+            @Override
+            public void run() {
+                runnable.run();
+            }
+        };
+    }
 }

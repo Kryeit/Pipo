@@ -7,6 +7,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import org.pipeman.pipo.Pipo;
 import org.pipeman.pipo.Utils;
+import org.pipeman.pipo.rest.OnlineApi;
 import org.pipeman.pipo.tps.Lag;
 
 import java.text.DecimalFormat;
@@ -16,6 +17,7 @@ public class PlayerLogin implements ServerPlayConnectionEvents.Join {
 
     @Override
     public void onPlayReady(ServerPlayNetworkHandler handler, PacketSender sender, MinecraftServer server) {
+        OnlineApi.broadcastChange();
         if (Utils.getOnlinePlayersSize() == 1) {
             Pipo.JDA.getPresence().setActivity(Activity.watching("1 player - " + format.format(Lag.getTPS()) + " TPS"));
         } else {

@@ -30,3 +30,7 @@ GET http://localhost:8080/api/leaderboard?offset=0&limit=20&order-by=last-played
 # "playtime", "last-played", "distance-walked", "deaths", "mob-kills"
 
 ###
+
+WEBSOCKET ws://localhost:8080/api/live
+
+###
