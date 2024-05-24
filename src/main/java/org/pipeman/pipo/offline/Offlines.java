@@ -20,7 +20,8 @@ public class Offlines {
         return Optional.ofNullable(getPlayerByName(name))
                 .map(ServerPlayerEntity::getUuid)
                 .or(() -> Optional.ofNullable(MinecraftServerSupplier.getServer().getUserCache())
-                        .flatMap(cache -> cache.findByName(name).map(GameProfile::getId)));
+                        .flatMap(cache -> Optional.of(cache.findByName(name).map(GameProfile::getId)))
+                        .orElse(Optional.of(new UUID(0, 0))));
     }
 
     public static Optional<String> getNameByUUID(UUID id) {
