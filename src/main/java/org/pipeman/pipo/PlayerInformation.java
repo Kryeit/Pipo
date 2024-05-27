@@ -13,6 +13,7 @@ public record PlayerInformation(
         @JsonSerialize long playtime,
         @JsonSerialize long lastSeen,
         @JsonSerialize boolean online,
+        @JsonSerialize boolean afk,
         @JsonSerialize(using = OptionalSerializer.class) Optional<Integer> totalClaimBlocks,
         @JsonSerialize BanStatus banStatus
 ) {
@@ -31,6 +32,7 @@ public record PlayerInformation(
                 Utils.getPlaytime(uuid),
                 Utils.getLastPlayed(uuid),
                 Utils.isOnline(playerName),
+                Utils.isAFK(playerName),
                 GriefDefenderImpl.isAvailable() ?
                         Optional.of(GriefDefenderImpl.getClaimBlocks(uuid)) :
                         Optional.empty(),
