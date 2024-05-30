@@ -106,7 +106,6 @@ public final class Pipo implements DedicatedServerModInitializer {
 
                     .addOptions(new OptionData(OptionType.STRING, "order-by", "Order by statistic (The playtime is used if omitted)", false)
                             .addChoice("playtime", "playtime")
-                            .addChoice("last-played", "last-played")
                             .addChoice("distance-walked", "distance-walked")
                             .addChoice("deaths", "deaths")
                             .addChoice("mob-kills", "mob-kills")
