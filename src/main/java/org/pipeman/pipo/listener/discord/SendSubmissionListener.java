@@ -18,11 +18,14 @@ public class SendSubmissionListener extends ListenerAdapter {
         if (!event.getChannel().getId().equals(PHOTO_CONTEST_CHANNEL)) return;
 
         String userId = event.getAuthor().getId();
-        List<Message> messages = event.getChannel().getHistory().retrievePast(200).complete();
-        for (Message message : messages) {
-            if (message.getAuthor().getId().equals(userId)) {
-                event.getMessage().delete().queue();
-                return;
+        String messageId = event.getMessageId();
+        List<Message> messages = event.getChannel().getHistory().retrievePast(100).complete();
+        if (messages != null && !messages.isEmpty()) {
+            for (Message message : messages) {
+                if (message.getAuthor().getId().equals(userId) && !message.getId().equals(messageId)) {
+                    event.getMessage().delete().queue();
+                    return;
+                }
             }
         }
 
@@ -32,7 +35,6 @@ public class SendSubmissionListener extends ListenerAdapter {
         if (hasAttachment || containsLink) {
             event.getMessage().addReaction(Emoji.fromUnicode("👍")).queue(); // Thumbs up
             event.getMessage().addReaction(Emoji.fromUnicode("👎")).queue(); // Thumbs down
-            event.getMessage().addReaction(Emoji.fromUnicode("🚫")).queue(); // Cancel
         } else {
             event.getMessage().delete().queue();
         }
@@ -44,17 +46,20 @@ public class SendSubmissionListener extends ListenerAdapter {
 
         Message message = event.retrieveMessage().complete();
         String userId = event.getUserId();
-        String emojiAdded = event.getReaction().getEmoji().asUnicode().getAsCodepoints();
+        String emojiAdded = event.getReaction().getEmoji().getName();
 
-        if (!emojiAdded.equals("U+1F44D") && !emojiAdded.equals("U+1F44E")) return; // Ignore non thumbs up/down reactions
 
-        // Check for existing opposite reactions
+        if (!emojiAdded.equals("👍") && !emojiAdded.equals("👎")) return; // Ignore non-thumbs up/down reactions
+
         List<MessageReaction> reactions = message.getReactions();
         for (MessageReaction reaction : reactions) {
             if (reaction.retrieveUsers().complete().stream().anyMatch(user -> user.getId().equals(userId))) {
-                if ((emojiAdded.equals("U+1F44D") && reaction.getEmoji().asUnicode().getAsCodepoints().equals("U+1F44E")) ||
-                        (emojiAdded.equals("U+1F44E") && reaction.getEmoji().asUnicode().getAsCodepoints().equals("U+1F44D"))) {
+                String reactionEmoji = reaction.getEmoji().getName();
+
+                if ((emojiAdded.equals("👍") && reactionEmoji.equals("👎")) ||
+                        (emojiAdded.equals("👎") && reactionEmoji.equals("👍"))) {
                     reaction.removeReaction(event.getUser()).queue();
+                    return;
                 }
             }
         }
