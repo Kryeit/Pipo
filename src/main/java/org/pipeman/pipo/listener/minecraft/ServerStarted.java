@@ -22,7 +22,7 @@ public class ServerStarted implements ServerLifecycleEvents.ServerStarted {
         Role role = JDA.getRoleById(rolePinged);
 
         builder.addField(
-                "The server has been started!" + (role != null ? " " + role.getAsMention() : ""),
+                "The server has been started!",
                 "You may log in and play",
                 false);
         builder.build();
@@ -30,6 +30,9 @@ public class ServerStarted implements ServerLifecycleEvents.ServerStarted {
         String commandsChannelID = "1059547652229963908";
         TextChannel commandsChannel = JDA.getTextChannelById(commandsChannelID);
         if (commandsChannel == null) return;
+        if (role != null) {
+            commandsChannel.sendMessage(role.getAsMention()).queue();
+        }
         commandsChannel.sendMessageEmbeds(builder.build()).queue();
     }
 }

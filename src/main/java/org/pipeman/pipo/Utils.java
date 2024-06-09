@@ -6,7 +6,9 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.model.group.Group;
 import net.luckperms.api.node.Node;
+import net.minecraft.server.network.ServerPlayerEntity;
 import org.json.JSONObject;
+import org.pipeman.pipo.afk.AfkPlayer;
 import org.pipeman.pipo.offline.Offlines;
 import org.pipeman.pipo.offline.OfflinesStats;
 import org.slf4j.Logger;
@@ -161,6 +163,13 @@ public class Utils {
         return List.of(MinecraftServerSupplier.getServer().getPlayerNames()).contains(name);
     }
 
+    public static boolean isAFK(String playerName) {
+        ServerPlayerEntity player = MinecraftServerSupplier.getServer().getPlayerManager().getPlayer(playerName);
+        AfkPlayer afkPlayer = (AfkPlayer) player;
+
+        return afkPlayer != null && afkPlayer.pipo$isAfk();
+    }
+
     public static int getOnlinePlayersSize() {
         return MinecraftServerSupplier.getServer().getCurrentPlayerCount();
     }
@@ -217,4 +226,6 @@ public class Utils {
             }
         };
     }
+
+
 }

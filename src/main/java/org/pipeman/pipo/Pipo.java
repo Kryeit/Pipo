@@ -19,6 +19,7 @@ import org.pipeman.pipo.commands.minecraft.CommandUnlinkDiscord;
 import org.pipeman.pipo.listener.discord.ButtonInteractionListener;
 import org.pipeman.pipo.listener.discord.DirectMessageListener;
 import org.pipeman.pipo.listener.discord.DownloadModsListener;
+import org.pipeman.pipo.listener.discord.SendSubmissionListener;
 import org.pipeman.pipo.listener.minecraft.PlayerLogin;
 import org.pipeman.pipo.listener.minecraft.PlayerQuit;
 import org.pipeman.pipo.listener.minecraft.ServerStarted;
@@ -63,6 +64,7 @@ public final class Pipo implements DedicatedServerModInitializer {
             JDA.addEventListener(new DownloadModsListener());
             JDA.addEventListener(new DirectMessageListener());
             JDA.addEventListener(new ButtonInteractionListener());
+            JDA.addEventListener(new SendSubmissionListener());
 
             JDA.awaitReady();
         } catch (IOException | InterruptedException e) {
@@ -106,7 +108,6 @@ public final class Pipo implements DedicatedServerModInitializer {
 
                     .addOptions(new OptionData(OptionType.STRING, "order-by", "Order by statistic (The playtime is used if omitted)", false)
                             .addChoice("playtime", "playtime")
-                            .addChoice("last-played", "last-played")
                             .addChoice("distance-walked", "distance-walked")
                             .addChoice("deaths", "deaths")
                             .addChoice("mob-kills", "mob-kills")
