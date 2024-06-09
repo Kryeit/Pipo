@@ -32,7 +32,9 @@ public class RestApiServer {
                 });
             });
         });
-        new Thread(() -> javalin.start(4001)).start();
+        Thread serverThread = new Thread(() -> javalin.start(4001));
+        serverThread.setDaemon(true);
+        serverThread.start();
     }
 
     public void stop() {
