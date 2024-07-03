@@ -62,7 +62,7 @@ public class CommandPlayerinfo {
                     inf.playtime() / 3_600 + " hours",
                     false
             );
-            embedBuilder.addField("Rank", Utils.ordinal(inf.rank()), false);
+            embedBuilder.addField("Rank", Utils.ordinal(inf.rank()), true);
 
             inf.totalClaimBlocks().ifPresent(blocks ->
                     embedBuilder.addField(
@@ -70,6 +70,11 @@ public class CommandPlayerinfo {
                             blocks + " blocks",
                             false
                     )
+            );
+            embedBuilder.addField(
+                    "Linked Discord account",
+                    inf.linkedDiscordAccount().map(l -> "<@!" + l + ">").orElse("Not linked yet"),
+                    true
             );
 
             embedBuilder.addField(

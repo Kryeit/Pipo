@@ -15,7 +15,8 @@ public record PlayerInformation(
         @JsonSerialize boolean online,
         @JsonSerialize boolean afk,
         @JsonSerialize(using = OptionalSerializer.class) Optional<Integer> totalClaimBlocks,
-        @JsonSerialize BanStatus banStatus
+        @JsonSerialize BanStatus banStatus,
+        @JsonSerialize Optional<Long> linkedDiscordAccount
 ) {
 
     public static Optional<PlayerInformation> of(String playerName) {
@@ -36,7 +37,8 @@ public record PlayerInformation(
                 GriefDefenderImpl.isAvailable() ?
                         Optional.of(GriefDefenderImpl.getClaimBlocks(uuid)) :
                         Optional.empty(),
-                BanStatus.ofPlayer(uuid, playerName)
+                BanStatus.ofPlayer(uuid, playerName),
+                Pipo.getInstance().discordRegistry.getDiscordIdLong(uuid)
         ));
     }
 }

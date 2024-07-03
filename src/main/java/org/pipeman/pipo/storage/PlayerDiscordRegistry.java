@@ -11,7 +11,7 @@ import java.util.UUID;
 public class PlayerDiscordRegistry {
 
     private final File registryFile;
-    private Map<UUID, String> playerDiscordMap = new HashMap<>();
+    private final Map<UUID, String> playerDiscordMap = new HashMap<>();
 
     public PlayerDiscordRegistry(String directory, String fileName) throws IOException {
         Files.createDirectories(Paths.get(directory));
@@ -48,6 +48,11 @@ public class PlayerDiscordRegistry {
 
     public String getDiscordId(UUID playerUuid) {
         return playerDiscordMap.get(playerUuid);
+    }
+
+    public Optional<Long> getDiscordIdLong(UUID playerUuid) {
+        String value = playerDiscordMap.get(playerUuid);
+        return Optional.ofNullable(value == null ? null : Long.parseLong(value));
     }
 
     public boolean hasPlayer(UUID playerUuid) {
