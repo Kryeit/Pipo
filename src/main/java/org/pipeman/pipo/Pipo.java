@@ -40,7 +40,7 @@ public final class Pipo implements DedicatedServerModInitializer {
     public final static String KRYEIT_GUILD = "910626990468497439";
     public LastTimePlayed lastTimePlayed;
     public PlayerDiscordRegistry discordRegistry;
-    public static Pipo instance;
+    private static Pipo instance;
 
     public static HashMap<UUID, Long> lastActiveTime = new HashMap<>();
     private RestApiServer restApiServer;
