@@ -9,6 +9,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 public record PlayerInformation(
+        @JsonSerialize String name,
+        @JsonSerialize UUID uuid,
         @JsonSerialize int rank,
         @JsonSerialize long playtime,
         @JsonSerialize long lastSeen,
@@ -40,6 +42,8 @@ public record PlayerInformation(
 
     public static Optional<PlayerInformation> of(UUID uuid, String playerName) {
         return Optional.of(new PlayerInformation(
+                playerName,
+                uuid,
                 Leaderboard.getRank(playerName),
                 Utils.getPlaytime(uuid),
                 Utils.getLastPlayed(uuid),
