@@ -25,9 +25,20 @@ public record PlayerInformation(
         UUID uuid = optionalUUID.get();
 
         Optional<String> nameByUUID = Offlines.getNameByUUID(uuid);
-        if (nameByUUID.isEmpty()) return Optional.empty();
-        playerName = nameByUUID.get();
+        return nameByUUID.flatMap(s -> of(uuid, s));
+    }
 
+    public static Optional<PlayerInformation> of(UUID uuid) {
+        Optional<String> nameByUUID = Offlines.getNameByUUID(uuid);
+        if (nameByUUID.isEmpty()) return Optional.empty();
+        String playerName = nameByUUID.get();
+
+        Optional<UUID> optionalUUID = Offlines.getUUIDbyName(playerName);
+        return optionalUUID.flatMap(value -> of(value, playerName));
+
+    }
+
+    public static Optional<PlayerInformation> of(UUID uuid, String playerName) {
         return Optional.of(new PlayerInformation(
                 Leaderboard.getRank(playerName),
                 Utils.getPlaytime(uuid),
