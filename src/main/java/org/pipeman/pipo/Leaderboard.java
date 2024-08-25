@@ -32,7 +32,9 @@ public class Leaderboard {
         return list;
     }
 
-    public static int getTotalCount() {
+    public static int getTotalCount(String valueKey) {
+        if (valueKey.equals("potatoes")) return PotatoManager.getTotalCount();
+
         int total = 0;
         for (UUID playerId : Offlines.getKnownPlayers()) {
             if (Offlines.getNameByUUID(playerId).isPresent()) total++;

@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.Set;
 
 public class LeaderboardApi {
-    private static final Set<String> LEADERBOARD_ATTRIBUTES = Set.of("playtime", "last-played", "distance-walked", "deaths", "mob-kills");
+    private static final Set<String> LEADERBOARD_ATTRIBUTES = Set.of("playtime", "last-played", "distance-walked", "deaths", "mob-kills", "potatoes");
 
     public static void getLeaderboard(Context ctx) {
         Order order = getOrder(ctx);
@@ -23,7 +23,7 @@ public class LeaderboardApi {
         }
 
         ctx.json(Map.of(
-                "total-count", Leaderboard.getTotalCount(),
+                "total-count", Leaderboard.getTotalCount(orderKey),
                 "leaderboard", Leaderboard.getLeaderboard(order, orderKey, limit, offset)
         ));
     }

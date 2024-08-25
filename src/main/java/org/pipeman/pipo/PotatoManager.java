@@ -60,4 +60,14 @@ public class PotatoManager {
                 .map((rs, ctx) -> new Rank(rs.getInt("rank"), new Value(rs.getInt("sum"))))
                 .findFirst());
     }
+
+    public static int getTotalCount() {
+        return Database.getJdbi().withHandle(h -> h.createQuery("""
+                        SELECT DISTINCT count(*)
+                        FROM potatoes
+                        """)
+                .mapTo(Integer.class)
+                .findFirst())
+                .orElse(0);
+    }
 }
