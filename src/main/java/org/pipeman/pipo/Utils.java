@@ -207,13 +207,15 @@ public class Utils {
     }
 
     public static List<String> getNameSuggestions(String input) {
-        input = input.toLowerCase();
+        String lcInput = input.toLowerCase();
         List<String> players = new ArrayList<>();
-        for (String name : Offlines.getPlayerNames()) {
+        for (UUID id : Offlines.getKnownPlayers()) {
             if (players.size() >= 5) break;
-            if (name != null && name.toLowerCase().contains(input) && !players.contains(name)) {
-                players.add(name);
-            }
+
+            Offlines.getNameByUUID(id)
+                    .filter(name -> name.toLowerCase().contains(lcInput))
+                    .filter(name -> !players.contains(name))
+                    .ifPresent(players::add);
         }
         return players;
     }

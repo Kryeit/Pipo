@@ -24,10 +24,9 @@ public class Leaderboard {
 
     public static List<LeaderboardEntry> getLeaderboard(Order order, String valueKey) {
         List<LeaderboardEntry> list = new ArrayList<>();
-        for (String name : Offlines.getPlayerNames()) {
-            if (name != null) {
-                list.add(new LeaderboardEntry(new Value(valueKey, name), name));
-            }
+        for (UUID id : Offlines.getKnownPlayers()) {
+            Offlines.getNameByUUID(id)
+                    .ifPresent(name -> list.add(new LeaderboardEntry(new Value(valueKey, id, name), name)));
         }
         list.sort(order.comparator());
         return list;
@@ -35,8 +34,8 @@ public class Leaderboard {
 
     public static int getTotalCount() {
         int total = 0;
-        for (String playerName : Offlines.getPlayerNames()) {
-            if (playerName != null) total++;
+        for (UUID playerId : Offlines.getKnownPlayers()) {
+            if (Offlines.getNameByUUID(playerId).isPresent()) total++;
         }
         return total;
     }
@@ -69,13 +68,13 @@ public class Leaderboard {
             @JsonProperty("value")
             private final String formatted;
 
-            public Value(String name, String playerName) {
+            public Value(String name, UUID player, String playerName) {
                 rawValue = switch (name) {
-                    case "playtime" -> Utils.getPlaytime(playerName);
-                    case "last-played" -> PlayerInformation.of(playerName).map(PlayerInformation::lastSeen).orElse(0L);
-                    case "distance-walked" -> customStatisticMapper("walk_one_cm", playerName);
-                    case "deaths" -> customStatisticMapper("deaths", playerName);
-                    case "mob-kills" -> customStatisticMapper("mob_kills", playerName);
+                    case "playtime" -> Utils.getPlaytime(player);
+                    case "last-played" -> PlayerInformation.of(player, playerName).map(PlayerInformation::lastSeen).orElse(0L);
+                    case "distance-walked" -> customStatisticMapper("walk_one_cm", player);
+                    case "deaths" -> customStatisticMapper("deaths", player);
+                    case "mob-kills" -> customStatisticMapper("mob_kills", player);
 
                     default -> throw new IllegalStateException("Unexpected value: " + name);
                 };
@@ -94,8 +93,8 @@ public class Leaderboard {
                 this.formatted = String.valueOf(value);
             }
 
-            private static long customStatisticMapper(String stat, String playerName) {
-                return OfflinesStats.getPlayerStat(stat, Offlines.getUUIDbyName(playerName).orElse(null));
+            private static long customStatisticMapper(String stat, UUID player) {
+                return OfflinesStats.getPlayerStat(stat, player);
             }
 
             private static String formatLastPlayed(long date) {
