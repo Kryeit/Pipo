@@ -1,9 +1,14 @@
 package org.pipeman.pipo.offline;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.pipeman.pipo.MinecraftServerSupplier;
 
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -17,18 +22,69 @@ public class Offlines {
     private static final Logger LOGGER = Logger.getLogger(Offlines.class.getName());
 
     public static Optional<UUID> getUUIDbyName(String name) {
-        return Optional.ofNullable(getPlayerByName(name))
-                .map(ServerPlayerEntity::getUuid)
-                .or(() -> Optional.ofNullable(MinecraftServerSupplier.getServer().getUserCache())
-                        .flatMap(cache -> cache.findByName(name).map(GameProfile::getId)));
+        String url = "https://api.mojang.com/users/profiles/minecraft/" + name;
+
+        try {
+            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+            connection.setRequestMethod("GET");
+            connection.setConnectTimeout(5000);
+            connection.setReadTimeout(5000);
+
+            int responseCode = connection.getResponseCode();
+            if (responseCode == 200) {
+                try (InputStreamReader reader = new InputStreamReader(connection.getInputStream())) {
+                    JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
+                    String id = jsonObject.get("id").getAsString();
+                    return Optional.of(UUID.fromString(
+                            id.replaceFirst(
+                                    "(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)",
+                                    "$1-$2-$3-$4-$5"
+                            )
+                    ));
+                }
+            } else if (responseCode == 204) {
+                return Optional.empty(); // No content, player name not found
+            } else {
+                throw new RuntimeException("HTTP error code: " + responseCode);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
     }
 
     public static Optional<String> getNameByUUID(UUID id) {
-        return Optional.ofNullable(getPlayerById(id))
-                .map(player -> player.getName().getString())
-                .or(() -> Optional.ofNullable(MinecraftServerSupplier.getServer().getUserCache())
-                        .flatMap(cache -> cache.getByUuid(id).map(GameProfile::getName)));
+        ServerPlayerEntity player = MinecraftServerSupplier.getServer().getPlayerManager().getPlayer(id);
+        if (player != null) {
+            return Optional.of(player.getName().getString());
+        }
+
+        String uuidString = id.toString().replace("-", ""); // Remove hyphens from UUID
+        String url = "https://sessionserver.mojang.com/session/minecraft/profile/" + uuidString;
+
+        try {
+            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+            connection.setRequestMethod("GET");
+            connection.setConnectTimeout(5000);
+            connection.setReadTimeout(5000);
+
+            int responseCode = connection.getResponseCode();
+            if (responseCode == 200) {
+                try (InputStreamReader reader = new InputStreamReader(connection.getInputStream())) {
+                    JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
+                    return Optional.of(jsonObject.get("name").getAsString());
+                }
+            } else if (responseCode == 204) {
+                return Optional.empty();
+            } else {
+                throw new RuntimeException("HTTP error code: " + responseCode);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
     }
+
 
     public static List<String> getPlayerNames() {
         List<String> players = new ArrayList<>();

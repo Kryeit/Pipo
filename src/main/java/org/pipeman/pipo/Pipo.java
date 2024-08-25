@@ -19,12 +19,14 @@ import org.pipeman.pipo.commands.minecraft.CommandDiscord;
 import org.pipeman.pipo.commands.minecraft.CommandLinkDiscord;
 import org.pipeman.pipo.commands.minecraft.CommandPotatoLeaderboard;
 import org.pipeman.pipo.commands.minecraft.CommandUnlinkDiscord;
+import org.pipeman.pipo.commands.minecraft.CommandWeb;
 import org.pipeman.pipo.listener.discord.ButtonInteractionListener;
 import org.pipeman.pipo.listener.discord.DirectMessageListener;
 import org.pipeman.pipo.listener.discord.DownloadModsListener;
 import org.pipeman.pipo.listener.discord.SendSubmissionListener;
 import org.pipeman.pipo.listener.minecraft.PlayerLogin;
 import org.pipeman.pipo.listener.minecraft.PlayerQuit;
+import org.pipeman.pipo.listener.minecraft.ServerStarted;
 import org.pipeman.pipo.rest.RestApiServer;
 import org.pipeman.pipo.storage.LastTimePlayed;
 import org.pipeman.pipo.storage.PlayerDiscordRegistry;
@@ -154,6 +156,7 @@ public final class Pipo implements DedicatedServerModInitializer {
             CommandUnlinkDiscord.register(dispatcher);
             CommandDiscord.register(dispatcher);
             CommandPotatoLeaderboard.register(dispatcher);
+            CommandWeb.register(dispatcher);
         });
     }
 
