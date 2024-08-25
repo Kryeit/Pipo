@@ -9,18 +9,14 @@ import org.pipeman.pipo.offline.OfflinesStats;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class Leaderboard {
-    public static List<LeaderboardEntry> getLeaderboard(Order order, String valueKey, int limit) {
-        List<LeaderboardEntry> leaderboard = getLeaderboard(order, valueKey);
-        return leaderboard.subList(0, Math.min(limit, leaderboard.size()));
-    }
-
     public static List<LeaderboardEntry> getLeaderboard(Order order, String valueKey, int limit, int offset) {
+        if (valueKey.equals("potatoes")) {
+            return PotatoManager.getLeaderboard(order, offset, limit);
+        }
+
         List<LeaderboardEntry> leaderboard = getLeaderboard(order, valueKey);
         if (offset >= leaderboard.size()) return List.of();
         return leaderboard.subList(offset, Math.min(leaderboard.size(), limit + offset));
@@ -45,13 +41,23 @@ public class Leaderboard {
         return total;
     }
 
-    public static int getRank(String playerName) {
-        List<LeaderboardEntry> leaderboard = getLeaderboard(Order.DESC, "playtime");
+    public static Optional<Rank> getRank(String playerName, String valueKey) {
+        if (valueKey.equals("potatoes")) {
+            return PotatoManager.getRank(Offlines.getUUIDbyName(playerName).orElse(null));
+        }
+
+        List<LeaderboardEntry> leaderboard = getLeaderboard(Order.DESC, valueKey);
         for (int i = 0; i < leaderboard.size(); i++)
             if (leaderboard.get(i).name().equals(playerName))
-                return i + 1;
+                return Optional.of(new Rank(i + 1, leaderboard.get(i).value()));
 
-        return -1;
+        return Optional.empty();
+    }
+
+    public static int getRank(String playerName) {
+        return getRank(playerName, "playtime")
+                .map(Rank::rank)
+                .orElse(-1);
     }
 
     // This is so ugly
@@ -67,24 +73,28 @@ public class Leaderboard {
                 rawValue = switch (name) {
                     case "playtime" -> Utils.getPlaytime(playerName);
                     case "last-played" -> PlayerInformation.of(playerName).map(PlayerInformation::lastSeen).orElse(0L);
-                    case "distance-walked" -> statisticMapper("walk_one_cm", playerName);
-                    case "deaths" -> statisticMapper("deaths", playerName);
-                    case "mob-kills" -> statisticMapper("mob_kills", playerName);
+                    case "distance-walked" -> customStatisticMapper("walk_one_cm", playerName);
+                    case "deaths" -> customStatisticMapper("deaths", playerName);
+                    case "mob-kills" -> customStatisticMapper("mob_kills", playerName);
 
                     default -> throw new IllegalStateException("Unexpected value: " + name);
                 };
 
                 formatted = switch (name) {
-                    case "deaths", "mob-kills" -> rawValue + "";
                     case "playtime" -> Utils.round(rawValue / 3_600d, 1) + "h";
                     case "last-played" -> formatLastPlayed(rawValue);
                     case "distance-walked" -> String.format("%.1f km", rawValue / 100_000d);
 
-                    default -> throw new IllegalStateException("Unexpected value: " + name);
+                    default -> String.valueOf(rawValue);
                 };
             }
 
-            private static long statisticMapper(String stat, String playerName) {
+            public Value(int value) {
+                this.rawValue = value;
+                this.formatted = String.valueOf(value);
+            }
+
+            private static long customStatisticMapper(String stat, String playerName) {
                 return OfflinesStats.getPlayerStat(stat, Offlines.getUUIDbyName(playerName).orElse(null));
             }
 
@@ -117,5 +127,9 @@ public class Leaderboard {
         public Comparator<LeaderboardEntry> comparator() {
             return comparator;
         }
+    }
+
+    public record Rank(int rank, Value value) {
+
     }
 }

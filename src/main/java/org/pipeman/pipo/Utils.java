@@ -218,6 +218,18 @@ public class Utils {
         return players;
     }
 
+    public static List<String> getBannedNameSuggestions(String input) {
+        input = input.toLowerCase();
+        List<String> players = new ArrayList<>();
+        for (String name : MinecraftServerSupplier.getServer().getPlayerManager().getUserBanList().getNames()) {
+            if (players.size() >= 5) break;
+            if (name != null && name.toLowerCase().contains(input) && !players.contains(name)) {
+                players.add(name);
+            }
+        }
+        return players;
+    }
+
     public static TimerTask timerTask(Runnable runnable) {
         return new TimerTask() {
             @Override
@@ -226,6 +238,4 @@ public class Utils {
             }
         };
     }
-
-
 }

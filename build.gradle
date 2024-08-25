@@ -1,6 +1,7 @@
 plugins {
     id 'fabric-loom' version '1.2-SNAPSHOT'
     id 'maven-publish'
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
 }
 
 version = project.mod_version
@@ -27,47 +28,61 @@ dependencies {
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-    include(implementation("net.dv8tion:JDA:${jda_version}"))
-    include(implementation("io.javalin:javalin:6.1.3"))
+    implementation "net.dv8tion:JDA:${jda_version}"
+    shadow "net.dv8tion:JDA:${jda_version}"
+
+    implementation "io.javalin:javalin:6.1.3"
+    shadow "io.javalin:javalin:6.1.3"
+
+    implementation 'org.json:json:20230227'
+    shadow 'org.json:json:20230227'
+
     compileOnly "com.griefdefender:api:${griefdefender_version}"
     compileOnly "net.luckperms:api:${luckperms_version}"
-    include(implementation 'org.json:json:20230227')
     compileOnly 'me.lucko:spark-api:0.1-SNAPSHOT'
 
-    include("org.eclipse.jetty.websocket:websocket-core-common:11.0.20")
-    include("org.eclipse.jetty.websocket:websocket-core-server:11.0.20")
-    include("org.eclipse.jetty.websocket:websocket-jetty-api:11.0.20")
-    include("org.eclipse.jetty.websocket:websocket-jetty-common:11.0.20")
-    include("org.eclipse.jetty.websocket:websocket-jetty-server:11.0.20")
-    include("org.eclipse.jetty.websocket:websocket-servlet:11.0.20")
-    include("org.eclipse.jetty.websocket:websocket-jetty-server:11.0.20")
-    include("org.eclipse.jetty:jetty-server:11.0.20")
-    include("org.eclipse.jetty:jetty-servlet:11.0.20")
-    include("org.eclipse.jetty:jetty-util:11.0.20")
-    include("org.eclipse.jetty:jetty-webapp:11.0.20")
-    include("org.eclipse.jetty:jetty-xml:11.0.20")
-    include("org.eclipse.jetty:jetty-http:11.0.20")
-    include("org.eclipse.jetty:jetty-io:11.0.20")
-    include("org.eclipse.jetty:jetty-jmx:11.0.20")
-    include("org.eclipse.jetty:jetty-security:11.0.20")
-    include("org.eclipse.jetty.toolchain:jetty-jakarta-servlet-api:5.0.2")
-    include("org.eclipse.jetty:jetty-util-ajax:11.0.20")
-    include("org.eclipse.jetty:jetty-xml:11.0.20")
-    include("org.jetbrains.kotlin:kotlin-stdlib:1.9.22")
+//    implementation("org.eclipse.jetty.websocket:websocket-core-common:11.0.20")
+//    implementation("org.eclipse.jetty.websocket:websocket-core-server:11.0.20")
+//    implementation("org.eclipse.jetty.websocket:websocket-jetty-api:11.0.20")
+//    implementation("org.eclipse.jetty.websocket:websocket-jetty-common:11.0.20")
+//    implementation("org.eclipse.jetty.websocket:websocket-jetty-server:11.0.20")
+//    implementation("org.eclipse.jetty.websocket:websocket-servlet:11.0.20")
+//    implementation("org.eclipse.jetty.websocket:websocket-jetty-server:11.0.20")
+//    implementation("org.eclipse.jetty:jetty-server:11.0.20")
+//    implementation("org.eclipse.jetty:jetty-servlet:11.0.20")
+//    implementation("org.eclipse.jetty:jetty-util:11.0.20")
+//    implementation("org.eclipse.jetty:jetty-webapp:11.0.20")
+//    implementation("org.eclipse.jetty:jetty-xml:11.0.20")
+//    implementation("org.eclipse.jetty:jetty-http:11.0.20")
+//    implementation("org.eclipse.jetty:jetty-io:11.0.20")
+//    implementation("org.eclipse.jetty:jetty-jmx:11.0.20")
+//    implementation("org.eclipse.jetty:jetty-security:11.0.20")
+//    implementation("org.eclipse.jetty.toolchain:jetty-jakarta-servlet-api:5.0.2")
+//    implementation("org.eclipse.jetty:jetty-util-ajax:11.0.20")
+//    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.22")
 
+    implementation 'org.jdbi:jdbi3-core:3.45.4'
+    shadow 'org.jdbi:jdbi3-core:3.45.4'
+
+    implementation 'com.clickhouse:clickhouse-jdbc:0.6.4:all'
+    shadow 'com.clickhouse:clickhouse-jdbc:0.6.4:all'
 
     // Dependencies for JDA
-    include "net.sf.trove4j:trove4j:3.0.3"
-    include 'org.slf4j:slf4j-nop:1.7.25'
-    include 'org.slf4j:slf4j-api:1.7.25'
-    include 'org.apache.commons:commons-collections4:4.3'
-    include 'com.neovisionaries:nv-websocket-client:2.14'
-    include 'com.squareup.okhttp3:okhttp:3.14.9'
-    include 'com.squareup.okio:okio:1.17.2'
-    include implementation('com.fasterxml.jackson.core:jackson-databind:2.10.1')
-    include implementation('com.fasterxml.jackson.core:jackson-annotations:2.10.1')
-    include implementation('com.fasterxml.jackson.core:jackson-core:2.10.1')
-    include "club.minnced:discord-webhooks:0.5.8"
+//    implementation "net.sf.trove4j:trove4j:3.0.3"
+//    implementation 'org.slf4j:slf4j-nop:1.7.25'
+//    implementation 'org.slf4j:slf4j-api:1.7.25'
+//    implementation 'org.apache.commons:commons-collections4:4.3'
+//    implementation 'com.neovisionaries:nv-websocket-client:2.14'
+//    implementation 'com.squareup.okhttp3:okhttp:3.14.9'
+//    implementation 'com.squareup.okio:okio:1.17.2'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.1'
+    shadow 'com.fasterxml.jackson.core:jackson-databind:2.10.1'
+
+    implementation 'com.zaxxer:HikariCP:5.1.0'
+    shadow 'com.zaxxer:HikariCP:5.1.0'
+//    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.10.1'
+//    implementation 'com.fasterxml.jackson.core:jackson-core:2.10.1'
+//    implementation "club.minnced:discord-webhooks:0.5.8"
 }
 
 processResources {
@@ -107,10 +122,20 @@ java {
     withSourcesJar()
 }
 
+shadowJar {
+    archiveClassifier.set("")
+    configurations = [project.configurations.shadow]
+}
+
 jar {
+    archiveClassifier.set("dev")
     from("LICENSE") {
         rename { "${it}_${project.archivesBaseName}"}
     }
+}
+
+tasks.build {
+    dependsOn tasks.shadowJar
 }
 
 // configure the maven publication

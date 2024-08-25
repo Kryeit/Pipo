@@ -7,6 +7,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import org.pipeman.pipo.Pipo;
 import org.pipeman.pipo.Utils;
+import org.pipeman.pipo.commands.CommandTpToAgua;
 import org.pipeman.pipo.rest.OnlineApi;
 import org.pipeman.pipo.tps.Lag;
 
@@ -23,5 +24,7 @@ public class PlayerLogin implements ServerPlayConnectionEvents.Join {
         } else {
             Pipo.JDA.getPresence().setActivity(Activity.watching(Utils.getOnlinePlayersSize() + 1 + " players - " + format.format(Lag.getTPS()) + " TPS"));
         }
+
+        CommandTpToAgua.teleportIfNecessary(handler.player, server);
     }
 }

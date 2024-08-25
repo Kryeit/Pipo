@@ -8,8 +8,11 @@ import java.nio.file.Files;
 import java.util.UUID;
 
 public class OfflinesStats {
-
     public static long getPlayerStat(String stat, UUID player) {
+        return getPlayerStat("minecraft:custom", stat, player);
+    }
+
+    public static long getPlayerStat(String category, String stat, UUID player) {
         File playerDataDirectory = new File("world/stats/");
         File[] statDataFiles = playerDataDirectory.listFiles((dir, name) -> name.endsWith(".json"));
 
@@ -21,10 +24,10 @@ public class OfflinesStats {
 
                 if (!player.equals(id)) continue;
 
-                String jsonContent = new String(Files.readAllBytes(playerDataFile.toPath()));
+                String jsonContent = Files.readString(playerDataFile.toPath());
                 JSONObject statData = new JSONObject(jsonContent);
 
-                JSONObject customStats = statData.getJSONObject("stats").getJSONObject("minecraft:custom");
+                JSONObject customStats = statData.getJSONObject("stats").optJSONObject(category, new JSONObject());
                 return customStats.optLong("minecraft:" + stat.toLowerCase(), 0);
             } catch (IllegalArgumentException | IOException e) {
                 System.err.println("Error processing file " + playerDataFile.getName() + ": " + e.getMessage());
@@ -35,4 +38,3 @@ public class OfflinesStats {
         return 0;
     }
 }
-

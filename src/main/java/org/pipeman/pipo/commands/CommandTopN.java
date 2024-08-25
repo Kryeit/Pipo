@@ -47,7 +47,7 @@ public class CommandTopN {
     }
 
     public static void handleTop10(SlashCommandInteractionEvent event) {
-        replyWithLeaderboard(Leaderboard.getLeaderboard(Order.DESC, "playtime", 10), 1, event);
+        replyWithLeaderboard(Leaderboard.getLeaderboard(Order.DESC, "playtime", 10, 0), 1, event);
     }
 
     private static void replyWithLeaderboard(List<LeaderboardEntry> entries, int startRank, SlashCommandInteractionEvent event) {

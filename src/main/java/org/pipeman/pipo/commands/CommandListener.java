@@ -3,8 +3,11 @@ package org.pipeman.pipo.commands;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.interactions.commands.OptionMapping;
+import net.dv8tion.jda.api.interactions.AutoCompleteQuery;
+import org.pipeman.pipo.DurationParser;
 import org.pipeman.pipo.Utils;
+
+import java.util.List;
 
 public class CommandListener extends ListenerAdapter {
     @Override
@@ -20,13 +23,24 @@ public class CommandListener extends ListenerAdapter {
             case "ticket" -> CommandTicket.handle(event);
             case "close" -> CommandCloseTicket.handle(event);
             case "nickname" -> CommandNickname.handle(event);
+            case "ban" -> CommandBan.handle(event);
+            case "unban" -> CommandUnban.handle(event);
+            case "tp-to-agua" -> CommandTpToAgua.handle(event);
         }
     }
 
     @Override
     public void onCommandAutoCompleteInteraction(CommandAutoCompleteInteractionEvent event) {
-        if (!event.getName().equals("playerinfo")) return;
-        String value = event.getOption("playername", "", OptionMapping::getAsString);
-        event.replyChoiceStrings(Utils.getNameSuggestions(value)).queue();
+        AutoCompleteQuery focusedOption = event.getFocusedOption();
+        String value = event.getFocusedOption().getValue();
+
+        List<String> suggestions = switch (focusedOption.getName()) {
+            case "playername" -> Utils.getNameSuggestions(value);
+            case "banned-playername" -> Utils.getBannedNameSuggestions(value);
+            case "duration" -> DurationParser.suggestDuration(value);
+            default -> List.of();
+        };
+
+        event.replyChoiceStrings(suggestions).queue();
     }
 }

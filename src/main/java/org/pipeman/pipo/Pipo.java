@@ -2,9 +2,11 @@ package org.pipeman.pipo;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.ISnowflake;
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -15,6 +17,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import org.pipeman.pipo.commands.CommandListener;
 import org.pipeman.pipo.commands.minecraft.CommandDiscord;
 import org.pipeman.pipo.commands.minecraft.CommandLinkDiscord;
+import org.pipeman.pipo.commands.minecraft.CommandPotatoLeaderboard;
 import org.pipeman.pipo.commands.minecraft.CommandUnlinkDiscord;
 import org.pipeman.pipo.listener.discord.ButtonInteractionListener;
 import org.pipeman.pipo.listener.discord.DirectMessageListener;
@@ -22,7 +25,6 @@ import org.pipeman.pipo.listener.discord.DownloadModsListener;
 import org.pipeman.pipo.listener.discord.SendSubmissionListener;
 import org.pipeman.pipo.listener.minecraft.PlayerLogin;
 import org.pipeman.pipo.listener.minecraft.PlayerQuit;
-import org.pipeman.pipo.listener.minecraft.ServerStarted;
 import org.pipeman.pipo.rest.RestApiServer;
 import org.pipeman.pipo.storage.LastTimePlayed;
 import org.pipeman.pipo.storage.PlayerDiscordRegistry;
@@ -73,6 +75,23 @@ public final class Pipo implements DedicatedServerModInitializer {
 
         Guild guild = JDA.getGuildById(KRYEIT_GUILD);
         if (guild != null) {
+            guild.upsertCommand("ban", "Bans a player")
+                    .addOption(OptionType.STRING, "playername", "The player's name", true, true)
+                    .addOption(OptionType.STRING, "reason", "The reason for the ban", false)
+                    .addOption(OptionType.STRING, "duration", "The duration of the ban", false, true)
+                    .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MODERATE_MEMBERS))
+                    .queue();
+
+            guild.upsertCommand("unban", "Unbans a player")
+                    .addOption(OptionType.STRING, "banned-playername", "The player's name", true, true)
+                    .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MODERATE_MEMBERS))
+                    .queue();
+
+            guild.upsertCommand("tp-to-agua", "Teleports the player to Agua")
+                    .addOption(OptionType.STRING, "playername", "The player's name", true, true)
+                    .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MODERATE_MEMBERS))
+                    .queue();
+
             guild.upsertCommand("nickname", "Changes your nickname to your Minecraft name")
                     .queue();
 
@@ -111,6 +130,7 @@ public final class Pipo implements DedicatedServerModInitializer {
                             .addChoice("distance-walked", "distance-walked")
                             .addChoice("deaths", "deaths")
                             .addChoice("mob-kills", "mob-kills")
+                            .addChoice("potatoes", "potatoes")
                     )
                     .addOptions(new OptionData(OptionType.STRING, "sort-direction", "Sorting direction (descending is used if omitted)", false)
                             .addChoice("ascending", "ascending")
@@ -133,6 +153,7 @@ public final class Pipo implements DedicatedServerModInitializer {
             CommandLinkDiscord.register(dispatcher);
             CommandUnlinkDiscord.register(dispatcher);
             CommandDiscord.register(dispatcher);
+            CommandPotatoLeaderboard.register(dispatcher);
         });
     }
 
