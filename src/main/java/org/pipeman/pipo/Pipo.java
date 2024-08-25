@@ -198,4 +198,15 @@ public final class Pipo implements DedicatedServerModInitializer {
             return new String(in.readAllBytes()).trim();
         }
     }
+
+    public static String readClickHouseKey() {
+        try (InputStream in = Pipo.class.getResourceAsStream("/clickhouse-secret.txt")) {
+            if (in == null) {
+                throw new FileNotFoundException("Resource not found: clickhouse-secret.txt");
+            }
+            return new String(in.readAllBytes()).trim();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
