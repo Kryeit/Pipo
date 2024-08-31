@@ -24,7 +24,7 @@ public class CommandVote {
                 false
         );
 
-        builder.setThumbnail("attachment://planet_minecraft.png");
+        builder.setThumbnail("https://raw.githubusercontent.com/CMD-Golem/CMD-Golem-Website/master/elements/nav/Planet%20Minecraft.svg");
         return builder.build();
     }
 }

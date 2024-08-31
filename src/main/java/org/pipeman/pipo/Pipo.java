@@ -78,6 +78,7 @@ public final class Pipo implements DedicatedServerModInitializer {
         Guild guild = JDA.getGuildById(KRYEIT_GUILD);
         if (guild != null) {
             guild.upsertCommand("changelog", "Sends a changelog")
+                    .addOption(OptionType.STRING, "author", "The author of the Changelog", true)
                     .addOption(OptionType.STRING, "changelog", "The changelog paragraph", true)
                     .addOption(OptionType.STRING, "version", "Version number. Example: 3.7", true)
                     .addOption(OptionType.BOOLEAN, "update", "Does the version number increase? (Big update)", true)

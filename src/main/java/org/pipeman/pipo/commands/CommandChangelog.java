@@ -14,6 +14,7 @@ public class CommandChangelog {
     public static String UPDATE_ROLE_ID = "1118550893021892650";
 
     public static void handle(SlashCommandInteractionEvent event) {
+        String author = event.getOption("author").getAsString();
         String changelog = event.getOption("changelog").getAsString();
         String version = event.getOption("version").getAsString();
         boolean update = Boolean.TRUE.equals(event.getOption("update").getAsBoolean());
@@ -22,17 +23,20 @@ public class CommandChangelog {
         if (update)
             event.getChannel().sendMessage(updateRole.getAsMention()).queue();
 
-        event.replyEmbeds(createEmbed(changelog, version, update))
+        event.replyEmbeds(createEmbed(author, changelog, version, update))
                 .mentionRepliedUser(false)
                 .queue();
     }
 
-    public static MessageEmbed createEmbed(String changelog, String version, boolean update) {
+    public static MessageEmbed createEmbed(String author, String changelog, String version, boolean update) {
 
 
         EmbedBuilder builder = new EmbedBuilder()
                 .setColor(new Color(59, 152, 0));
 
+        String filename = author.hashCode() + ".png";
+        builder.setAuthor(author, null, "attachment://" + filename);
+        
         if (update) {
             builder.setTitle("Kryeit " + version, "https://modrinth.com/modpack/kryeit/version/" + version);
         } else {
