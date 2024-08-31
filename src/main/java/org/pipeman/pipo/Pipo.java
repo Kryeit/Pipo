@@ -77,6 +77,21 @@ public final class Pipo implements DedicatedServerModInitializer {
 
         Guild guild = JDA.getGuildById(KRYEIT_GUILD);
         if (guild != null) {
+            guild.upsertCommand("changelog", "Sends a changelog")
+                    .addOption(OptionType.STRING, "changelog", "The changelog paragraph", true)
+                    .addOption(OptionType.STRING, "version", "Version number. Example: 3.7", true)
+                    .addOption(OptionType.BOOLEAN, "update", "Does the version number increase? (Big update)", true)
+                    .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.ADMINISTRATOR))
+                    .queue();
+
+            guild.upsertCommand("kofi", "Sends the donation Link")
+                    .queue();
+            guild.upsertCommand("donate", "Sends the donation Link")
+                    .queue();
+
+            guild.upsertCommand("vote", "Changes your nickname to your Minecraft name")
+                    .queue();
+
             guild.upsertCommand("ban", "Bans a player")
                     .addOption(OptionType.STRING, "playername", "The player's name", true, true)
                     .addOption(OptionType.STRING, "reason", "The reason for the ban", false)

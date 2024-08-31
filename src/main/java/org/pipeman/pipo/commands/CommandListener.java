@@ -26,6 +26,9 @@ public class CommandListener extends ListenerAdapter {
             case "ban" -> CommandBan.handle(event);
             case "unban" -> CommandUnban.handle(event);
             case "tp-to-agua" -> CommandTpToAgua.handle(event);
+            case "kofi", "donate" -> CommandKofi.handle(event);
+            case "vote" -> CommandVote.handle(event);
+            case "changelog" -> CommandChangelog.handle(event);
         }
     }
 

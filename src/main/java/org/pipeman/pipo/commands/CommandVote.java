@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 
 import java.awt.*;
 
-public class CommandMods {
+public class CommandVote {
     public static void handle(SlashCommandInteractionEvent event) {
         event.replyEmbeds(createEmbed())
                 .mentionRepliedUser(false)
@@ -16,25 +16,15 @@ public class CommandMods {
     public static MessageEmbed createEmbed() {
         EmbedBuilder builder = new EmbedBuilder()
                 .setColor(new Color(59, 152, 0))
-                .setTitle("Joining kryeit.com");
+                .setTitle("Voting site", "https://www.planetminecraft.com/server/kryeit-5584167/vote/");
 
         builder.addField(
-                "Step 1: Install Fabric",
-                "You can install fabric [here](https://fabricmc.net/use/installer/)",
-                false);
-
-        builder.addField(
-                "Step 2: Download required mods",
-                "Click [here](https://kryeit.com/mods) to download the mods.\n" +
-                        "Or download the [Modrinth](https://modrinth.com/modpack/kryeit) modpack",
+                "Link",
+                "https://www.planetminecraft.com/server/kryeit-5584167/vote/",
                 false
         );
 
-        builder.addField(
-                "Suggested launcher",
-                "[Modrinth app](https://modrinth.com/app)",
-                false
-        );
+        builder.setThumbnail("attachment://planet_minecraft.png");
         return builder.build();
     }
 }

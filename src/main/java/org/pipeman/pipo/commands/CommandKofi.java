@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 
 import java.awt.*;
 
-public class CommandMods {
+public class CommandKofi {
     public static void handle(SlashCommandInteractionEvent event) {
         event.replyEmbeds(createEmbed())
                 .mentionRepliedUser(false)
@@ -16,23 +16,11 @@ public class CommandMods {
     public static MessageEmbed createEmbed() {
         EmbedBuilder builder = new EmbedBuilder()
                 .setColor(new Color(59, 152, 0))
-                .setTitle("Joining kryeit.com");
+                .setTitle("Ko-fi", "https://ko-fi.com/kryeit");
 
         builder.addField(
-                "Step 1: Install Fabric",
-                "You can install fabric [here](https://fabricmc.net/use/installer/)",
-                false);
-
-        builder.addField(
-                "Step 2: Download required mods",
-                "Click [here](https://kryeit.com/mods) to download the mods.\n" +
-                        "Or download the [Modrinth](https://modrinth.com/modpack/kryeit) modpack",
-                false
-        );
-
-        builder.addField(
-                "Suggested launcher",
-                "[Modrinth app](https://modrinth.com/app)",
+                "Link",
+                "https://www.ko-fi.com/kryeit",
                 false
         );
         return builder.build();
