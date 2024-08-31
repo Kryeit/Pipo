@@ -33,9 +33,6 @@ public class CommandChangelog {
         EmbedBuilder builder = new EmbedBuilder()
                 .setColor(new Color(59, 152, 0));
 
-        // Separate the changelog into lines
-        String[] changelogs = changelog.split("\n");
-
         if (update) {
             builder.setTitle("Kryeit " + version, "https://modrinth.com/modpack/kryeit/version/" + version);
         } else {
