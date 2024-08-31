@@ -5,6 +5,8 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
+import net.dv8tion.jda.api.utils.FileUpload;
+import org.pipeman.pipo.Utils;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -23,12 +25,12 @@ public class CommandChangelog {
         if (update)
             event.getChannel().sendMessage(updateRole.getAsMention()).queue();
 
-        event.replyEmbeds(createEmbed(author, changelog, version, update))
+        event.replyEmbeds(createEmbed(event, author, changelog, version, update))
                 .mentionRepliedUser(false)
                 .queue();
     }
 
-    public static MessageEmbed createEmbed(String author, String changelog, String version, boolean update) {
+    public static MessageEmbed createEmbed(SlashCommandInteractionEvent event, String author, String changelog, String version, boolean update) {
 
 
         EmbedBuilder builder = new EmbedBuilder()
@@ -36,7 +38,10 @@ public class CommandChangelog {
 
         String filename = author.hashCode() + ".png";
         builder.setAuthor(author, null, "attachment://" + filename);
-        
+        event.getHook().sendFiles(FileUpload.fromData(Utils.getHeadSkin(author), filename))
+                .setEmbeds(builder.build())
+                .queue();
+
         if (update) {
             builder.setTitle("Kryeit " + version, "https://modrinth.com/modpack/kryeit/version/" + version);
         } else {
