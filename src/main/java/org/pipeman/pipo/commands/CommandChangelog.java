@@ -21,7 +21,7 @@ public class CommandChangelog {
 
         Role updateRole = event.getGuild().getRoleById(UPDATE_ROLE_ID);
         if (update)
-            event.getChannel().sendMessage(updateRole.getAsMention()).queue();
+            event.getChannel().sendMessage("|| " + updateRole.getAsMention() + " ||").queue();
 
         event.deferReply().queue();
         event.getHook().sendFiles(FileUpload.fromData(Utils.getHeadSkin(author), author.hashCode() + ".png"))
