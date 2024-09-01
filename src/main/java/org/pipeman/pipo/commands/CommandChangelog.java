@@ -4,12 +4,10 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.utils.FileUpload;
 import org.pipeman.pipo.Utils;
 
 import java.awt.*;
-import java.util.Arrays;
 
 public class CommandChangelog {
 
@@ -25,22 +23,15 @@ public class CommandChangelog {
         if (update)
             event.getChannel().sendMessage(updateRole.getAsMention()).queue();
 
-        event.replyEmbeds(createEmbed(event, author, changelog, version, update))
-                .mentionRepliedUser(false)
+        event.deferReply().queue();
+        event.getHook().sendFiles(FileUpload.fromData(Utils.getHeadSkin(author), author.hashCode() + ".png"))
+                .setEmbeds(createEmbed(author, changelog, version, update))
                 .queue();
     }
 
-    public static MessageEmbed createEmbed(SlashCommandInteractionEvent event, String author, String changelog, String version, boolean update) {
-
-
+    public static MessageEmbed createEmbed(String author, String changelog, String version, boolean update) {
         EmbedBuilder builder = new EmbedBuilder()
                 .setColor(new Color(59, 152, 0));
-
-        String filename = author.hashCode() + ".png";
-        builder.setAuthor(author, null, "attachment://" + filename);
-        event.getHook().sendFiles(FileUpload.fromData(Utils.getHeadSkin(author), filename))
-                .setEmbeds(builder.build())
-                .queue();
 
         if (update) {
             builder.setTitle("Kryeit " + version, "https://modrinth.com/modpack/kryeit/version/" + version);
@@ -55,6 +46,10 @@ public class CommandChangelog {
         );
 
         builder.setFooter("Kryeit Team");
+
+        String filename = author.hashCode() + ".png";
+        builder.setAuthor(author, null, "attachment://" + filename);
+
         return builder.build();
     }
 }
