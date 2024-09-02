@@ -29,6 +29,7 @@ public class CommandListener extends ListenerAdapter {
             case "kofi", "donate" -> CommandKofi.handle(event);
             case "vote" -> CommandVote.handle(event);
             case "changelog" -> CommandChangelog.handle(event);
+            case "voyage" -> CommandVoyage.handle(event);
         }
     }
 

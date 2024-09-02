@@ -73,6 +73,14 @@ public final class Pipo implements DedicatedServerModInitializer {
 
         Guild guild = JDA.getGuildById(KRYEIT_GUILD);
         if (guild != null) {
+            guild.upsertCommand("voyage", "Creates a voyage embed")
+                    .addOption(OptionType.STRING, "title", "The title of the embed", true)
+                    .addOption(OptionType.STRING, "secondaryTitle", "Smaller title", true)
+                    .addOption(OptionType.STRING, "description", "Long description, use \\n to do a line jump", true)
+                    .addOption(OptionType.STRING, "photo", "Photo of the voyage, use a URL", true)
+                    .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.ADMINISTRATOR))
+                    .queue();
+
             guild.upsertCommand("changelog", "Sends a changelog")
                     .addOption(OptionType.STRING, "author", "The author of the Changelog", true)
                     .addOption(OptionType.STRING, "changelog", "The changelog paragraph", true)
