@@ -34,23 +34,24 @@ public class CommandVoyage {
         String title = event.getOption("title").getAsString();
         String secondaryTitle = event.getOption("secondary-title").getAsString();
         String description = event.getOption("description").getAsString();
-        String photo = event.getOption("photo").getAsString();
+        String logoUrl = event.getOption("logo-url").getAsString();
+        String imageUrl = event.getOption("image-url").getAsString();
 
         Role updateRole = event.getGuild().getRoleById(VOYAGES_ROLE_ID);
         event.getChannel().sendMessage("|| " + updateRole.getAsMention() + " ||").queue();
 
         event.deferReply().queue();
         event.getHook().sendFiles(FileUpload.fromData(Utils.getHeadSkin(playerName), playerName.hashCode() + ".png"))
-                .setEmbeds(createEmbed(playerName, title, secondaryTitle, description, photo))
+                .setEmbeds(createEmbed(playerName, title, secondaryTitle, description, logoUrl, imageUrl))
                 .queue();
     }
 
-    public static MessageEmbed createEmbed(String playerName, String title, String secondaryTitle, String description, String photo) {
+    public static MessageEmbed createEmbed(
+            String playerName, String title, String secondaryTitle, String description, String logoUrl, String imageUrl) {
         EmbedBuilder builder = new EmbedBuilder()
                 .setColor(new Color(59, 152, 0));
 
         builder.setTitle(title);
-
 
         builder.addField(
                 secondaryTitle,
@@ -63,7 +64,8 @@ public class CommandVoyage {
         String filename = playerName.hashCode() + ".png";
         builder.setAuthor(playerName, null, "attachment://" + filename);
 
-        builder.setThumbnail(photo);
+        builder.setThumbnail(logoUrl);
+        builder.setImage(imageUrl);
 
         return builder.build();
     }
