@@ -37,6 +37,9 @@ dependencies {
     implementation 'org.json:json:20230227'
     shadow 'org.json:json:20230227'
 
+    implementation 'org.jsoup:jsoup:1.18.1'
+    shadow 'org.jsoup:jsoup:1.18.1'
+
     compileOnly "com.griefdefender:api:${griefdefender_version}"
     compileOnly "net.luckperms:api:${luckperms_version}"
     compileOnly 'me.lucko:spark-api:0.1-SNAPSHOT'

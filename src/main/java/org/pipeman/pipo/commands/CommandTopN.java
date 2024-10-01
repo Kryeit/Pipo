@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import org.pipeman.pipo.Leaderboard;
 import org.pipeman.pipo.Leaderboard.LeaderboardEntry;
 import org.pipeman.pipo.Leaderboard.Order;
+import org.pipeman.pipo.TopDonatorCache;
 import org.pipeman.pipo.Utils;
 
 import java.awt.*;
@@ -43,16 +44,33 @@ public class CommandTopN {
             return;
         }
 
-        replyWithLeaderboard(leaderboard, offset + 1, event);
+        event.deferReply().queue();
+
+        MessageEmbed embed = new EmbedBuilder()
+                .setTitle("Leaderboard")
+                .addField("Leaderboard", buildLeaderboardContent(leaderboard, offset + 1), false)
+                .setColor(new Color(59, 152, 0))
+                .build();
+        event.getHook().editOriginalEmbeds(embed).queue();
     }
 
     public static void handleTop10(SlashCommandInteractionEvent event) {
-        replyWithLeaderboard(Leaderboard.getLeaderboard(Order.DESC, "playtime", 10, 0), 1, event);
-    }
-
-    private static void replyWithLeaderboard(List<LeaderboardEntry> entries, int startRank, SlashCommandInteractionEvent event) {
         event.deferReply().queue();
 
+        List<LeaderboardEntry> entries = Leaderboard.getLeaderboard(Order.DESC, "playtime", 10, 0);
+        List<String> topDonators = TopDonatorCache.getTopDonators();
+
+        MessageEmbed embed = new EmbedBuilder()
+                .setTitle("Leaderboard")
+                .addField("Leaderboard", buildLeaderboardContent(entries, 1), true)
+                .addField("Top Supporters", buildTopDonatorContent(topDonators), true)
+                .addField("You can donate here", "https://ko-fi.com/kryeit", false)
+                .setColor(new Color(59, 152, 0))
+                .build();
+        event.getHook().editOriginalEmbeds(embed).queue();
+    }
+
+    private static String buildLeaderboardContent(List<LeaderboardEntry> entries, int startRank) {
         StringBuilder content = new StringBuilder();
         int rank = startRank;
         for (LeaderboardEntry le : entries) {
@@ -65,11 +83,22 @@ public class CommandTopN {
             content.append(newLine);
             rank++;
         }
-        MessageEmbed embed = new EmbedBuilder()
-                .setTitle("Leaderboard")
-                .addField("Leaderboard", content.toString(), false)
-                .setColor(new Color(59, 152, 0))
-                .build();
-        event.getHook().editOriginalEmbeds(embed).queue();
+        return content.toString();
+    }
+
+    private static String buildTopDonatorContent(List<String> entries) {
+        StringBuilder content = new StringBuilder();
+        int rank = 1;
+        for (String name : entries) {
+            String newLine = MessageFormat.format(
+                    "**{0}:** {1}\n",
+                    rank, Utils.escapeName(name)
+            );
+            if (newLine.length() + content.length() > MessageEmbed.VALUE_MAX_LENGTH) break;
+
+            content.append(newLine);
+            rank++;
+        }
+        return content.toString();
     }
 }

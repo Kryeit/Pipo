@@ -169,6 +169,7 @@ public final class Pipo implements DedicatedServerModInitializer {
         registerDisableEvent();
 
         scheduleTimers();
+        TopDonatorCache.init();
     }
 
     public void registerCommands() {
