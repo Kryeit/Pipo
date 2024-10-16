@@ -3,10 +3,7 @@ package org.pipeman.pipo.storage;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class PlayerDiscordRegistry {
 
@@ -78,5 +75,9 @@ public class PlayerDiscordRegistry {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public Set<Map.Entry<UUID, String>> getEntries() {
+        return playerDiscordMap.entrySet();
     }
 }

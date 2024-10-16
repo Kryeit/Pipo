@@ -37,6 +37,9 @@ dependencies {
     implementation 'org.json:json:20230227'
     shadow 'org.json:json:20230227'
 
+    implementation 'org.apache.httpcomponents:httpclient:4.5.14'
+    shadow 'org.apache.httpcomponents:httpclient:4.5.14'
+
     implementation 'org.jsoup:jsoup:1.18.1'
     shadow 'org.jsoup:jsoup:1.18.1'
 

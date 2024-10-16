@@ -5,8 +5,10 @@ import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.server.MinecraftServer;
+import org.pipeman.pipo.Pipo;
 
 import java.awt.*;
+import java.time.Duration;
 
 import static org.pipeman.pipo.Pipo.JDA;
 
@@ -18,6 +20,13 @@ public class ServerStarted implements ServerLifecycleEvents.ServerStarted {
         EmbedBuilder builder = new EmbedBuilder()
                 .setColor(new Color(59, 152, 0))
                 .setTitle("Kryeit.com");
+
+        StringBuilder membersToPing = new StringBuilder();
+        Pipo.getInstance().discordRegistry.getEntries().forEach(entry -> {
+            if (Pipo.getInstance().lastTimePlayed.getElement(entry.getKey()) * 1000 > System.currentTimeMillis() - Duration.ofMinutes(30).toMillis()) {
+                membersToPing.append("<@").append(entry.getValue()).append("> ");
+            }
+        });
 
         Role role = JDA.getRoleById(rolePinged);
 
@@ -31,7 +40,7 @@ public class ServerStarted implements ServerLifecycleEvents.ServerStarted {
         TextChannel commandsChannel = JDA.getTextChannelById(commandsChannelID);
         if (commandsChannel == null) return;
         if (role != null) {
-            commandsChannel.sendMessage(role.getAsMention()).queue();
+            commandsChannel.sendMessage(role.getAsMention() + membersToPing).queue();
         }
         commandsChannel.sendMessageEmbeds(builder.build()).queue();
     }
