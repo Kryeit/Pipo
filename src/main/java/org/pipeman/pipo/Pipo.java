@@ -26,6 +26,7 @@ import org.pipeman.pipo.listener.minecraft.ServerStarted;
 import org.pipeman.pipo.rest.RestApiServer;
 import org.pipeman.pipo.storage.LastTimePlayed;
 import org.pipeman.pipo.storage.PlayerDiscordRegistry;
+import org.pipeman.pipo.storage.PlayerTogglePing;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -40,6 +41,8 @@ public final class Pipo implements DedicatedServerModInitializer {
     public final static String KRYEIT_GUILD = "910626990468497439";
     public LastTimePlayed lastTimePlayed;
     public PlayerDiscordRegistry discordRegistry;
+    public PlayerTogglePing playerTogglePing;
+
     private static Pipo instance;
 
     public static HashMap<UUID, Long> lastActiveTime = new HashMap<>();
@@ -54,6 +57,7 @@ public final class Pipo implements DedicatedServerModInitializer {
         try {
             lastTimePlayed = new LastTimePlayed("mods/pipo/last_time_played");
             discordRegistry = new PlayerDiscordRegistry("mods/pipo", "discord_registry.properties");
+            playerTogglePing = new PlayerTogglePing("mods/pipo", "player_toggle_ping.properties");
 
             JDA = JDABuilder.createDefault(readToken())
                     .setActivity(Activity.watching("0 players"))
@@ -73,6 +77,9 @@ public final class Pipo implements DedicatedServerModInitializer {
 
         Guild guild = JDA.getGuildById(KRYEIT_GUILD);
         if (guild != null) {
+            guild.upsertCommand("toggle-ping", "Toggles the server start ping")
+                    .queue();
+
             guild.upsertCommand("voyage", "Creates a voyage embed")
                     .addOption(OptionType.STRING, "name", "The company/city's name", true)
                     .addOption(OptionType.STRING, "title", "The title of the embed", true)

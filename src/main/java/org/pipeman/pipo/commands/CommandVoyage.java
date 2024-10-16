@@ -8,7 +8,6 @@ import net.dv8tion.jda.api.utils.FileUpload;
 import org.pipeman.pipo.Pipo;
 import org.pipeman.pipo.Utils;
 import org.pipeman.pipo.offline.Offlines;
-import org.pipeman.pipo.storage.PlayerDiscordRegistry;
 
 import java.awt.*;
 import java.util.Optional;

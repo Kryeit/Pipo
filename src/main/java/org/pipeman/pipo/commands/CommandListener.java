@@ -30,6 +30,7 @@ public class CommandListener extends ListenerAdapter {
             case "vote" -> CommandVote.handle(event);
             case "changelog" -> CommandChangelog.handle(event);
             case "voyage" -> CommandVoyage.handle(event);
+            case "toggle-ping" -> CommandTogglePing.handle(event);
         }
     }
 

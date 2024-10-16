@@ -23,6 +23,8 @@ public class ServerStarted implements ServerLifecycleEvents.ServerStarted {
 
         StringBuilder membersToPing = new StringBuilder();
         Pipo.getInstance().discordRegistry.getEntries().forEach(entry -> {
+            if (!Pipo.getInstance().playerTogglePing.isPingEnabled(entry.getKey()).orElse(false)) return;
+
             if (Pipo.getInstance().lastTimePlayed.getElement(entry.getKey()) * 1000 > System.currentTimeMillis() - Duration.ofMinutes(30).toMillis()) {
                 membersToPing.append("<@").append(entry.getValue()).append("> ");
             }
