@@ -97,15 +97,16 @@ public class  Utils {
     private static void copyRect(BufferedImage in, BufferedImage out, int x, int y, int width, int height, int destX, int destY) {
         for (int xI = 0; xI < width; xI++) {
             for (int yI = 0; yI < height; yI++) {
-                Color oldColor = new Color(out.getRGB(xI + destX, yI + destY));
-                Color newColor = new Color(in.getRGB(xI + x, yI + y));
+                Color newColor = new Color(in.getRGB(xI + x, yI + y), true);
 
                 if (newColor.getAlpha() == 0) continue;
 
-                int a = newColor.getAlpha() / 255;
-                int r = oldColor.getRed() + (newColor.getRed() - oldColor.getRed()) * a;
-                int g = oldColor.getGreen() + (newColor.getGreen() - oldColor.getGreen()) * a;
-                int b = oldColor.getBlue() + (newColor.getBlue() - oldColor.getBlue()) * a;
+                Color oldColor = new Color(out.getRGB(xI + destX, yI + destY), true);
+
+                float alpha = newColor.getAlpha() / 255.0f;
+                int r = (int) (newColor.getRed() * alpha + oldColor.getRed() * (1 - alpha));
+                int g = (int) (newColor.getGreen() * alpha + oldColor.getGreen() * (1 - alpha));
+                int b = (int) (newColor.getBlue() * alpha + oldColor.getBlue() * (1 - alpha));
 
                 out.setRGB(xI + destX, yI + destY, new Color(r, g, b).getRGB());
             }
