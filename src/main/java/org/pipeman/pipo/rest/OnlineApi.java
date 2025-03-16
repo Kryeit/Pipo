@@ -1,15 +1,15 @@
 package org.pipeman.pipo.rest;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.kryeit.idler.MinecraftServerSupplier;
+import com.kryeit.idler.afk.AfkPlayer;
 import io.javalin.http.Context;
 import io.javalin.websocket.WsCloseContext;
 import io.javalin.websocket.WsConnectContext;
 import io.javalin.websocket.WsContext;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.jetbrains.annotations.NotNull;
-import org.pipeman.pipo.MinecraftServerSupplier;
 import org.pipeman.pipo.Utils;
-import org.pipeman.pipo.afk.AfkPlayer;
 
 import java.util.Collections;
 import java.util.List;
@@ -54,7 +54,7 @@ public class OnlineApi {
         ServerPlayerEntity player = MinecraftServerSupplier.getServer().getPlayerManager().getPlayer(name);
         AfkPlayer afkPlayer = (AfkPlayer) player;
 
-        return afkPlayer != null && afkPlayer.pipo$isAfk();
+        return afkPlayer != null && afkPlayer.idler$isAfk();
     }
 
     private record OnlineEntry(@JsonSerialize String playerName,

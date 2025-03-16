@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.server.MinecraftServer;
 import org.pipeman.pipo.Pipo;
+import org.pipeman.pipo.auth.UserApi;
 
 import java.awt.*;
 import java.time.Duration;
@@ -25,7 +26,7 @@ public class ServerStarted implements ServerLifecycleEvents.ServerStarted {
         Pipo.getInstance().discordRegistry.getEntries().forEach(entry -> {
             if (!Pipo.getInstance().playerTogglePing.isPingEnabled(entry.getKey()).orElse(false)) return;
 
-            if (Pipo.getInstance().lastTimePlayed.getElement(entry.getKey()) * 1000 > System.currentTimeMillis() - Duration.ofMinutes(30).toMillis()) {
+            if (UserApi.getLastSeen(entry.getKey()).getTime() > System.currentTimeMillis() - Duration.ofMinutes(30).toMillis()) {
                 membersToPing.append("<@").append(entry.getValue()).append("> ");
             }
         });

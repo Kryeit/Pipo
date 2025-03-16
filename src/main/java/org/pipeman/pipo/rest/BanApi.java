@@ -1,9 +1,9 @@
 package org.pipeman.pipo.rest;
 
+import com.kryeit.idler.MinecraftServerSupplier;
 import io.javalin.http.Context;
 import net.minecraft.server.BannedPlayerList;
 import org.pipeman.pipo.BanStatus;
-import org.pipeman.pipo.MinecraftServerSupplier;
 import org.pipeman.pipo.Utils;
 
 import java.util.Arrays;

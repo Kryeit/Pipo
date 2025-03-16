@@ -1,12 +1,12 @@
 package org.pipeman.pipo.commands;
 
+import com.kryeit.idler.MinecraftServerSupplier;
+import com.kryeit.idler.afk.AfkPlayer;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.minecraft.server.network.ServerPlayerEntity;
-import org.pipeman.pipo.MinecraftServerSupplier;
 import org.pipeman.pipo.Utils;
-import org.pipeman.pipo.afk.AfkPlayer;
 import org.pipeman.pipo.tps.Lag;
 
 import java.awt.*;
@@ -27,7 +27,7 @@ public class CommandOnline {
             ServerPlayerEntity player = MinecraftServerSupplier.getServer().getPlayerManager().getPlayer(name);
             AfkPlayer afkPlayer = (AfkPlayer) player;
 
-            if (afkPlayer != null && afkPlayer.pipo$isAfk()) {
+            if (afkPlayer != null && afkPlayer.idler$isAfk()) {
                 name = "~~" + name + "~~";
             }
 

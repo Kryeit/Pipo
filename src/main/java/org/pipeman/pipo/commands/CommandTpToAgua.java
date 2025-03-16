@@ -1,5 +1,6 @@
 package org.pipeman.pipo.commands;
 
+import com.kryeit.idler.MinecraftServerSupplier;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.minecraft.server.MinecraftServer;
@@ -8,7 +9,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.chunk.ChunkManager;
 import net.minecraft.world.chunk.ChunkStatus;
-import org.pipeman.pipo.MinecraftServerSupplier;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -23,7 +23,7 @@ public class CommandTpToAgua {
         ServerPlayerEntity player = server.getPlayerManager().getPlayer(playername);
         if (player == null) {
             playersToTeleportOnJoin.add(playername);
-            event.reply(playername + " will be teleported to Agua the next time they join")
+            event.reply(playername + " will be teleported to Agua the next time they join, if server doesn't restart ")
                     .setEphemeral(true)
                     .queue();
         } else {

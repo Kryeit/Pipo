@@ -6,7 +6,7 @@
   "description": "",
   "authors": ["MrRedRhino", "MuriPlz"],
   "contact": {
-    "repo": "https://github.com/MrRedRhino/Player-Info-Bot"
+    "repo": "https://github.com/Kryeit/Pipo"
   },
   "license": "All-Rights-Reserved",
   "icon": "assets/pipo/icon.png",
@@ -24,6 +24,8 @@
     "fabric": "*",
     "minecraft": "1.20.x",
     "spark": "*",
-    "luckperms": "*"
+    "luckperms": "*",
+    "votifier": "*",
+    "idler": "*"
   }
 }

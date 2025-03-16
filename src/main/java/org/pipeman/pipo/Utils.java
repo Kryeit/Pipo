@@ -1,5 +1,7 @@
 package org.pipeman.pipo;
 
+import com.kryeit.idler.MinecraftServerSupplier;
+import com.kryeit.idler.afk.AfkPlayer;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -8,7 +10,7 @@ import net.luckperms.api.model.group.Group;
 import net.luckperms.api.node.Node;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.json.JSONObject;
-import org.pipeman.pipo.afk.AfkPlayer;
+import org.pipeman.pipo.auth.UserApi;
 import org.pipeman.pipo.offline.Offlines;
 import org.pipeman.pipo.offline.OfflinesStats;
 import org.slf4j.Logger;
@@ -165,7 +167,7 @@ public class  Utils {
     }
 
     public static long getLastPlayed(UUID uuid) {
-        return Pipo.getInstance().lastTimePlayed.getElement(uuid) * 1000;
+        return UserApi.getLastSeen(uuid).getTime();
     }
 
     public static boolean isOnline(String name) {
@@ -176,7 +178,7 @@ public class  Utils {
         ServerPlayerEntity player = MinecraftServerSupplier.getServer().getPlayerManager().getPlayer(playerName);
         AfkPlayer afkPlayer = (AfkPlayer) player;
 
-        return afkPlayer != null && afkPlayer.pipo$isAfk();
+        return afkPlayer != null && afkPlayer.idler$isAfk();
     }
 
     public static int getOnlinePlayersSize() {

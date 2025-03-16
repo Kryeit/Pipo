@@ -24,7 +24,6 @@ import org.pipeman.pipo.listener.minecraft.PlayerLogin;
 import org.pipeman.pipo.listener.minecraft.PlayerQuit;
 import org.pipeman.pipo.listener.minecraft.ServerStarted;
 import org.pipeman.pipo.rest.RestApiServer;
-import org.pipeman.pipo.storage.LastTimePlayed;
 import org.pipeman.pipo.storage.PlayerDiscordRegistry;
 import org.pipeman.pipo.storage.PlayerTogglePing;
 
@@ -39,7 +38,6 @@ import java.util.concurrent.TimeUnit;
 public final class Pipo implements DedicatedServerModInitializer {
     public static JDA JDA;
     public final static String KRYEIT_GUILD = "910626990468497439";
-    public LastTimePlayed lastTimePlayed;
     public PlayerDiscordRegistry discordRegistry;
     public PlayerTogglePing playerTogglePing;
 
@@ -55,7 +53,6 @@ public final class Pipo implements DedicatedServerModInitializer {
         restApiServer = new RestApiServer();
 
         try {
-            lastTimePlayed = new LastTimePlayed("mods/pipo/last_time_played");
             discordRegistry = new PlayerDiscordRegistry("mods/pipo", "discord_registry.properties");
             playerTogglePing = new PlayerTogglePing("mods/pipo", "player_toggle_ping.properties");
 

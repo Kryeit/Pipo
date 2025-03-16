@@ -18,11 +18,6 @@ public class PlayerQuit implements ServerPlayConnectionEvents.Disconnect {
     @Override
     public void onPlayDisconnect(ServerPlayNetworkHandler handler, MinecraftServer server) {
         OnlineApi.broadcastChange();
-        try {
-            Pipo.getInstance().lastTimePlayed.addElement(handler.player.getUuid(), System.currentTimeMillis() / 1000);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
 
         if (Utils.getOnlinePlayersSize() - 1 == 1) {
             Pipo.JDA.getPresence().setActivity(Activity.watching("1 player - " + format.format(Lag.getTPS()) + " TPS"));

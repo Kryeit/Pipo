@@ -1,7 +1,7 @@
 package org.pipeman.pipo.offline;
 
+import com.kryeit.idler.MinecraftServerSupplier;
 import com.mojang.authlib.GameProfile;
-import org.pipeman.pipo.MinecraftServerSupplier;
 import org.pipeman.pipo.Utils;
 
 import java.io.File;
