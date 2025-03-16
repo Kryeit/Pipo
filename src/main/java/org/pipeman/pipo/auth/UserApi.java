@@ -17,24 +17,4 @@ public class UserApi {
                         .orElse(null)
         );
     }
-
-    public static void updateLastSeen(UUID uuid) {
-        Database.getJdbi().useHandle(handle -> {
-            handle.createUpdate("UPDATE users SET last_seen = NOW() WHERE uuid = :uuid")
-                .bind("uuid", uuid)
-                .execute();
-        });
-    }
-
-    public static void createUser(UUID id, String name, String stats) {
-        Database.getJdbi().useHandle(h -> h.createUpdate("""
-                        INSERT INTO users (uuid, username, roles, stats)
-                        VALUES (:uuid, :username, '{DEFAULT}', :stats)
-                        ON CONFLICT ON CONSTRAINT users_pkey DO NOTHING
-                        """)
-                .bind("uuid", id)
-                .bind("username", name)
-                .bind("stats", stats)
-                .execute());
-    }
 }

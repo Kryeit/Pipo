@@ -9,7 +9,6 @@ import org.pipeman.pipo.Utils;
 import org.pipeman.pipo.rest.OnlineApi;
 import org.pipeman.pipo.tps.Lag;
 
-import java.io.IOException;
 import java.text.DecimalFormat;
 
 public class PlayerQuit implements ServerPlayConnectionEvents.Disconnect {

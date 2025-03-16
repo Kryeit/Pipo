@@ -4,10 +4,7 @@
   "package": "org.pipeman.pipo.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "BlockMixin",
-    "MinecraftServerMixin",
-    "ServerPlayerMixin",
-    "ServerPlayNetworkMixin"
+    "BlockMixin"
   ],
   "client": [
   ],
