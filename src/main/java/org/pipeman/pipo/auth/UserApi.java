@@ -28,8 +28,8 @@ public class UserApi {
 
     public static UUID getUUIDbyName(String playerName) {
         return Database.getJdbi().withHandle(handle ->
-                handle.createQuery("SELECT uuid FROM users WHERE name = :name")
-                        .bind("name", playerName)
+                handle.createQuery("SELECT uuid FROM users WHERE username = :username")
+                        .bind("username", playerName)
                         .mapTo(UUID.class)
                         .findOne()
                         .orElse(null)
@@ -38,7 +38,7 @@ public class UserApi {
 
     public static String getNameByUUID(UUID uuid) {
         return Database.getJdbi().withHandle(handle ->
-                handle.createQuery("SELECT name FROM users WHERE uuid = :uuid")
+                handle.createQuery("SELECT username FROM users WHERE uuid = :uuid")
                         .bind("uuid", uuid)
                         .mapTo(String.class)
                         .findOne()
