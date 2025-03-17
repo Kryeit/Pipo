@@ -1,8 +1,8 @@
 package org.pipeman.pipo;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.pipeman.pipo.auth.UserApi;
 import org.pipeman.pipo.compat.GriefDefenderImpl;
-import org.pipeman.pipo.offline.Offlines;
 import org.pipeman.pipo.rest.OptionalSerializer;
 
 import java.util.Optional;
@@ -22,22 +22,18 @@ public record PlayerInformation(
 ) {
 
     public static Optional<PlayerInformation> of(String playerName) {
-        Optional<UUID> optionalUUID = Offlines.getUUIDbyName(playerName);
-        if (optionalUUID.isEmpty()) return Optional.empty();
-        UUID uuid = optionalUUID.get();
+        UUID uuid = UserApi.getUUIDbyName(playerName);
+        if (uuid == null) return Optional.empty();
 
-        Optional<String> nameByUUID = Offlines.getNameByUUID(uuid);
-        return nameByUUID.flatMap(s -> of(uuid, s));
+        String name = UserApi.getNameByUUID(uuid);
+        return of(uuid, name);
     }
 
     public static Optional<PlayerInformation> of(UUID uuid) {
-        Optional<String> nameByUUID = Offlines.getNameByUUID(uuid);
-        if (nameByUUID.isEmpty()) return Optional.empty();
-        String playerName = nameByUUID.get();
+        String name = UserApi.getNameByUUID(uuid);
+        if (name == null) return Optional.empty();
 
-        Optional<UUID> optionalUUID = Offlines.getUUIDbyName(playerName);
-        return optionalUUID.flatMap(value -> of(value, playerName));
-
+        return of(uuid, name);
     }
 
     public static Optional<PlayerInformation> of(UUID uuid, String playerName) {

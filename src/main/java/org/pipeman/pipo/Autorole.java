@@ -2,7 +2,7 @@ package org.pipeman.pipo;
 
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
-import org.pipeman.pipo.offline.Offlines;
+import org.pipeman.pipo.auth.UserApi;
 
 import java.util.TimerTask;
 import java.util.UUID;
@@ -33,7 +33,7 @@ public class Autorole extends TimerTask {
             }
         });
 
-        Offlines.getKnownPlayers().forEach(id -> {
+        UserApi.getKnownPlayers().forEach(id -> {
             if (!Pipo.getInstance().discordRegistry.hasPlayer(id)) {
                 Utils.isPlayerOnGroup(id, role.getName().toLowerCase()).thenAcceptAsync(result -> {
                     if (result)

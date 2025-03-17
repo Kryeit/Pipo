@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.utils.FileUpload;
 import org.pipeman.pipo.PlayerInformation;
 import org.pipeman.pipo.Utils;
-import org.pipeman.pipo.offline.Offlines;
+import org.pipeman.pipo.auth.UserApi;
 import org.pipeman.pipo.offline.OfflinesStats;
 
 import java.awt.*;
@@ -21,12 +21,12 @@ public class CommandPlayerinfo {
     public static void handle(SlashCommandInteractionEvent event) {
         OptionMapping playerOption = event.getOption("playername");
         String playerName = playerOption == null ? null : playerOption.getAsString();
-        playerName = Offlines.getNameByUUID(Offlines.getUUIDbyName(playerName).orElse(null)).orElse(playerName);
+        playerName = UserApi.getNameByUUID(UserApi.getUUIDbyName(playerName));
 
         if (playerName == null || playerName.isEmpty()) {
 
             // Check if the user has linked their Minecraft account to their Discord account
-            playerName = Offlines.getNameByUUID(Utils.getPlayerLinked(event.getMember())).orElse(null);
+            playerName = UserApi.getNameByUUID(Utils.getPlayerLinked(event.getMember()));
 
             if (playerName == null || playerName.isEmpty()) {
                 event.reply("You need to specify a player name or link your Minecraft account to your Discord account.").setEphemeral(true).queue();
@@ -80,9 +80,9 @@ public class CommandPlayerinfo {
             embedBuilder.addField(
                     "Other statistics",
                     String.format("%.1f km walked, %d deaths, %d mobs killed",
-                            OfflinesStats.getPlayerStat("walk_one_cm", Offlines.getUUIDbyName(finalPlayerName).orElse(null)) / 100_000d,
-                            OfflinesStats.getPlayerStat("deaths", Offlines.getUUIDbyName(finalPlayerName).orElse(null)),
-                            OfflinesStats.getPlayerStat("mob_kills", Offlines.getUUIDbyName(finalPlayerName).orElse(null))
+                            OfflinesStats.getPlayerStat("walk_one_cm", UserApi.getUUIDbyName(finalPlayerName)) / 100_000d,
+                            OfflinesStats.getPlayerStat("deaths", UserApi.getUUIDbyName(finalPlayerName)),
+                            OfflinesStats.getPlayerStat("mob_kills", UserApi.getUUIDbyName(finalPlayerName))
                     ),
                     false
             );

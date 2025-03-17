@@ -3,7 +3,7 @@ package org.pipeman.pipo;
 import org.pipeman.pipo.Leaderboard.LeaderboardEntry;
 import org.pipeman.pipo.Leaderboard.LeaderboardEntry.Value;
 import org.pipeman.pipo.Leaderboard.Rank;
-import org.pipeman.pipo.offline.Offlines;
+import org.pipeman.pipo.auth.UserApi;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,8 +38,8 @@ public class PotatoManager {
                 .bind("offset", offset)
                 .bind("limit", limit)
                 .map((rs, ctx) -> {
-                    Optional<String> name = Offlines.getNameByUUID(rs.getObject("player", UUID.class));
-                    return new LeaderboardEntry(new Value(rs.getInt("sum")), name.orElse(null));
+                    String name = UserApi.getNameByUUID(rs.getObject("player", UUID.class));
+                    return new LeaderboardEntry(new Value(rs.getInt("sum")), name);
                 })
                 .list());
     }

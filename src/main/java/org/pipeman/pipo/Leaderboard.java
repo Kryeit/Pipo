@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.pipeman.pipo.Leaderboard.LeaderboardEntry.Value;
-import org.pipeman.pipo.offline.Offlines;
+import org.pipeman.pipo.auth.UserApi;
 import org.pipeman.pipo.offline.OfflinesStats;
 
 import java.text.DateFormat;
@@ -24,9 +24,12 @@ public class Leaderboard {
 
     public static List<LeaderboardEntry> getLeaderboard(Order order, String valueKey) {
         List<LeaderboardEntry> list = new ArrayList<>();
-        for (UUID id : Offlines.getKnownPlayers()) {
-            Offlines.getNameByUUID(id)
-                    .ifPresent(name -> list.add(new LeaderboardEntry(new Value(valueKey, id, name), name)));
+        for (UUID id : UserApi.getKnownPlayers()) {
+            String name = UserApi.getNameByUUID(id);
+
+            if(name != null) {
+                list.add(new LeaderboardEntry(new Value(valueKey, id, name), name));
+            }
         }
         list.sort(order.comparator());
         return list;
@@ -36,15 +39,15 @@ public class Leaderboard {
         if (valueKey.equals("potatoes")) return PotatoManager.getTotalCount();
 
         int total = 0;
-        for (UUID playerId : Offlines.getKnownPlayers()) {
-            if (Offlines.getNameByUUID(playerId).isPresent()) total++;
+        for (UUID playerId : UserApi.getKnownPlayers()) {
+            if (UserApi.getNameByUUID(playerId) != null) total++;
         }
         return total;
     }
 
     public static Optional<Rank> getRank(String playerName, String valueKey) {
         if (valueKey.equals("potatoes")) {
-            return PotatoManager.getRank(Offlines.getUUIDbyName(playerName).orElse(null));
+            return PotatoManager.getRank(UserApi.getUUIDbyName(playerName));
         }
 
         List<LeaderboardEntry> leaderboard = getLeaderboard(Order.DESC, valueKey);

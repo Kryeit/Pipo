@@ -17,4 +17,32 @@ public class UserApi {
                         .orElse(null)
         );
     }
+
+    public static Iterable<UUID> getKnownPlayers() {
+        return Database.getJdbi().withHandle(handle ->
+                handle.createQuery("SELECT uuid FROM users")
+                        .mapTo(UUID.class)
+                        .list()
+        );
+    }
+
+    public static UUID getUUIDbyName(String playerName) {
+        return Database.getJdbi().withHandle(handle ->
+                handle.createQuery("SELECT uuid FROM users WHERE name = :name")
+                        .bind("name", playerName)
+                        .mapTo(UUID.class)
+                        .findOne()
+                        .orElse(null)
+        );
+    }
+
+    public static String getNameByUUID(UUID uuid) {
+        return Database.getJdbi().withHandle(handle ->
+                handle.createQuery("SELECT name FROM users WHERE uuid = :uuid")
+                        .bind("uuid", uuid)
+                        .mapTo(String.class)
+                        .findOne()
+                        .orElse(null)
+        );
+    }
 }

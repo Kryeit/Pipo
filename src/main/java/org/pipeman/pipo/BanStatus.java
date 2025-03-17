@@ -5,10 +5,9 @@ import com.kryeit.idler.MinecraftServerSupplier;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.server.BannedPlayerEntry;
 import net.minecraft.server.BannedPlayerList;
-import org.pipeman.pipo.offline.Offlines;
+import org.pipeman.pipo.auth.UserApi;
 
 import java.util.Date;
-import java.util.Optional;
 import java.util.UUID;
 
 public record BanStatus(
@@ -26,7 +25,7 @@ public record BanStatus(
     }
 
     public static BanStatus ofPlayer(String playerName) {
-        Optional<UUID> uuid = Offlines.getUUIDbyName(playerName);
-        return uuid.map(value -> ofPlayer(value, playerName)).orElse(null);
+        UUID uuid = UserApi.getUUIDbyName(playerName);
+        return ofPlayer(uuid, playerName);
     }
 }

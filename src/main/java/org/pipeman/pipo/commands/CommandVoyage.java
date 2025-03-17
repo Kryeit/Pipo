@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.utils.FileUpload;
 import org.pipeman.pipo.Pipo;
 import org.pipeman.pipo.Utils;
-import org.pipeman.pipo.offline.Offlines;
+import org.pipeman.pipo.auth.UserApi;
 
 import java.awt.*;
 import java.util.Optional;
@@ -45,7 +45,9 @@ public class CommandVoyage {
             return;
         }
 
-        String playerName = Offlines.getNameByUUID(uuid.get()).orElse("Unknown");
+        String playerName = UserApi.getNameByUUID(uuid.get());
+
+        if (playerName == null) playerName = "Unknown";
 
         String name = event.getOption("name").getAsString();
         String title = event.getOption("title").getAsString();

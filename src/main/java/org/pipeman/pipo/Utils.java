@@ -11,7 +11,6 @@ import net.luckperms.api.node.Node;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.json.JSONObject;
 import org.pipeman.pipo.auth.UserApi;
-import org.pipeman.pipo.offline.Offlines;
 import org.pipeman.pipo.offline.OfflinesStats;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,10 +56,10 @@ public class  Utils {
 
     public static byte[] getSkin(String name) {
         try {
-            Optional<UUID> uuid = Offlines.getUUIDbyName(name);
-            if (uuid.isEmpty()) return new byte[0];
+            UUID uuid = UserApi.getUUIDbyName(name);
+            if (uuid == null) return new byte[0];
 
-            HttpRequest request = HttpRequest.newBuilder(URI.create("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.get())).build();
+            HttpRequest request = HttpRequest.newBuilder(URI.create("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid)).build();
 
             String body = CLIENT.send(request, HttpResponse.BodyHandlers.ofString()).body();
             JSONObject data = new JSONObject(body);
@@ -154,8 +153,8 @@ public class  Utils {
     }
 
     public static long getPlaytime(String name) {
-        Optional<UUID> id = Offlines.getUUIDbyName(name);
-        return id.map(Utils::getPlaytime).orElse(0L);
+        UUID id = UserApi.getUUIDbyName(name);
+        return getPlaytime(id);
     }
 
     public static long getPlaytime(UUID uuid) {
@@ -220,13 +219,13 @@ public class  Utils {
     public static List<String> getNameSuggestions(String input) {
         String lcInput = input.toLowerCase();
         List<String> players = new ArrayList<>();
-        for (UUID id : Offlines.getKnownPlayers()) {
+        for (UUID id : UserApi.getKnownPlayers()) {
             if (players.size() >= 5) break;
 
-            Offlines.getNameByUUID(id)
-                    .filter(name -> name.toLowerCase().contains(lcInput))
-                    .filter(name -> !players.contains(name))
-                    .ifPresent(players::add);
+            String name = UserApi.getNameByUUID(id);
+            if (name != null && name.toLowerCase().contains(lcInput) && !players.contains(name)) {
+                players.add(name);
+            }
         }
         return players;
     }

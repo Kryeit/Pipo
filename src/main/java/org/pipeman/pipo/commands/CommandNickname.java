@@ -3,7 +3,7 @@ package org.pipeman.pipo.commands;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.pipeman.pipo.Pipo;
-import org.pipeman.pipo.offline.Offlines;
+import org.pipeman.pipo.auth.UserApi;
 
 import java.util.UUID;
 
@@ -19,7 +19,7 @@ public class CommandNickname {
             return;
         }
 
-        String nickname = Offlines.getNameByUUID(uuid).orElse(null);
+        String nickname = UserApi.getNameByUUID(uuid);
         Guild guild =  event.getGuild();
 
         if (nickname == null) return;
