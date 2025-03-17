@@ -1,5 +1,6 @@
 package org.pipeman.pipo;
 
+import com.kryeit.idler.config.ConfigReader;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.Permission;
@@ -31,12 +32,14 @@ import org.pipeman.pipo.storage.PlayerTogglePing;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public final class Pipo implements DedicatedServerModInitializer {
+    public static final String MODID = "pipo";
     public static JDA JDA;
     public final static String KRYEIT_GUILD = "910626990468497439";
     public PlayerDiscordRegistry discordRegistry;
@@ -54,8 +57,14 @@ public final class Pipo implements DedicatedServerModInitializer {
         restApiServer = new RestApiServer();
 
         try {
-            discordRegistry = new PlayerDiscordRegistry("mods/pipo", "discord_registry.properties");
-            playerTogglePing = new PlayerTogglePing("mods/pipo", "player_toggle_ping.properties");
+            ConfigReader.readFile(Path.of("config/" + MODID));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            discordRegistry = new PlayerDiscordRegistry("mods/" + MODID, "discord_registry.properties");
+            playerTogglePing = new PlayerTogglePing("mods/" + MODID, "player_toggle_ping.properties");
 
             JDA = JDABuilder.createDefault(readToken())
                     .setActivity(Activity.watching("0 players"))
@@ -191,6 +200,7 @@ public final class Pipo implements DedicatedServerModInitializer {
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
             JDA.shutdown();
             UserApi.shutdown();
+            PostgresDatabase.closeDataSource();
             restApiServer.stop();
             restApiServer = null;
             JDA = null;

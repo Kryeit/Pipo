@@ -16,7 +16,7 @@ public class PotatoManager {
 
     public static void storePotatoes(UUID player, int count) {
         EXECUTOR.execute(() -> {
-            Database.getJdbi().useHandle(h -> h.createUpdate("""
+            ClickhouseDatabase.getJdbi().useHandle(h -> h.createUpdate("""
                             INSERT INTO potatoes (player, amount)
                             VALUES (:player, :count)
                             """)
@@ -27,7 +27,7 @@ public class PotatoManager {
     }
 
     public static List<LeaderboardEntry> getLeaderboard(Leaderboard.Order order, int offset, int limit) {
-        return Database.getJdbi().withHandle(h -> h.createQuery("""
+        return ClickhouseDatabase.getJdbi().withHandle(h -> h.createQuery("""
                         SELECT sum(amount) AS sum, player
                         FROM potatoes
                         GROUP BY player
@@ -45,7 +45,7 @@ public class PotatoManager {
     }
 
     public static Optional<Rank> getRank(UUID player) {
-        return Database.getJdbi().withHandle(h -> h.createQuery("""
+        return ClickhouseDatabase.getJdbi().withHandle(h -> h.createQuery("""
                         SELECT rank, sum
                         FROM (
                                  SELECT player,
@@ -62,7 +62,7 @@ public class PotatoManager {
     }
 
     public static int getTotalCount() {
-        return Database.getJdbi().withHandle(h -> h.createQuery("""
+        return ClickhouseDatabase.getJdbi().withHandle(h -> h.createQuery("""
                         SELECT DISTINCT count(*)
                         FROM potatoes
                         """)

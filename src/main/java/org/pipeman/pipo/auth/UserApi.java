@@ -1,6 +1,6 @@
 package org.pipeman.pipo.auth;
 
-import org.pipeman.pipo.Database;
+import org.pipeman.pipo.PostgresDatabase;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -45,7 +45,7 @@ public class UserApi {
     }
 
     public static void refreshCache() {
-        Map<UUID, String> players = Database.getJdbi().withHandle(handle ->
+        Map<UUID, String> players = PostgresDatabase.getJdbi().withHandle(handle ->
                 handle.createQuery("SELECT uuid, username FROM users")
                         .reduceRows(new HashMap<>(), (map, row) -> {
                             UUID uuid = row.getColumn("uuid", UUID.class);
@@ -59,7 +59,7 @@ public class UserApi {
     }
 
     public static Timestamp getLastSeen(UUID uuid) {
-        return Database.getJdbi().withHandle(handle ->
+        return PostgresDatabase.getJdbi().withHandle(handle ->
                 handle.createQuery("SELECT last_seen FROM users WHERE uuid = :uuid")
                         .bind("uuid", uuid)
                         .mapTo(Timestamp.class)
@@ -82,7 +82,7 @@ public class UserApi {
             }
         }
 
-        UUID uuid = Database.getJdbi().withHandle(handle ->
+        UUID uuid = PostgresDatabase.getJdbi().withHandle(handle ->
                 handle.createQuery("SELECT uuid FROM users WHERE username = :username")
                         .bind("username", playerName)
                         .mapTo(UUID.class)
@@ -105,7 +105,7 @@ public class UserApi {
             return cachedName;
         }
 
-        String username = Database.getJdbi().withHandle(handle ->
+        String username = PostgresDatabase.getJdbi().withHandle(handle ->
                 handle.createQuery("SELECT username FROM users WHERE uuid = :uuid")
                         .bind("uuid", uuid)
                         .mapTo(String.class)

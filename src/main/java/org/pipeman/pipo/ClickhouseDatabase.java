@@ -6,7 +6,7 @@ import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.core.mapper.reflect.ConstructorMapper;
 import org.pipeman.pipo.auth.User;
 
-public class Database {
+public class ClickhouseDatabase {
     private static final Jdbi jdbi;
 
     static {
@@ -16,8 +16,6 @@ public class Database {
         config.setPassword(Pipo.readClickHouseKey());
 
         jdbi = Jdbi.create(new HikariDataSource(config));
-
-        jdbi.registerRowMapper(ConstructorMapper.factory(User.class));
     }
 
     public static Jdbi getJdbi() {
