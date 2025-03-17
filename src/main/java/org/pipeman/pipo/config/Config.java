@@ -1,6 +1,5 @@
 package org.pipeman.pipo.config;
 
-
 import static org.pipeman.pipo.config.ConfigReader.*;
 
 public class Config {

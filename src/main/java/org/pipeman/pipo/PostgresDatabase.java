@@ -1,10 +1,12 @@
 package org.pipeman.pipo;
 
+import com.google.gson.JsonObject;
 import com.mojang.logging.LogUtils;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.core.mapper.reflect.ConstructorMapper;
+import org.pipeman.pipo.auth.JsonObjectMapper;
 import org.pipeman.pipo.auth.User;
 import org.pipeman.pipo.config.Config;
 import org.slf4j.Logger;
@@ -21,7 +23,7 @@ public class PostgresDatabase {
 
     static {
         HikariConfig hikariConfig = new HikariConfig();
-        hikariConfig.setUsername(Config.dbUrl);
+        hikariConfig.setUsername(Config.dbUser);
         hikariConfig.setPassword(Config.dbPassword);
         hikariConfig.setJdbcUrl(Config.dbUrl);
 
@@ -29,6 +31,8 @@ public class PostgresDatabase {
             dataSource = new HikariDataSource(hikariConfig);
             JDBI = Jdbi.create(dataSource);
             JDBI.registerRowMapper(ConstructorMapper.factory(User.class));
+
+            JDBI.registerColumnMapper(JsonObject.class, new JsonObjectMapper());
 
         } catch (Exception e) {
             logger.error("Failed to initialize database connection", e);

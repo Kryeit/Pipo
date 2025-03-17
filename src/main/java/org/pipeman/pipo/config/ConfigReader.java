@@ -15,17 +15,39 @@ public class ConfigReader {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ConfigReader.class);
 
-    public static String DB_URL;
-    public static String DB_USER;
-    public static String DB_PASSWORD;
+    // Initialize with nulls to make errors more obvious
+    public static String DB_URL = null;
+    public static String DB_USER = null;
+    public static String DB_PASSWORD = null;
 
     public static void readFile(Path path) throws IOException {
-        String config = readOrCopyFile(path.resolve("config.json"), "/config.json");
-        JsonObject configObject = JsonParser.parseString(config).getAsJsonObject();
+        try {
+            String config = readOrCopyFile(path.resolve("config.json"), "/config.json");
+            JsonObject configObject = JsonParser.parseString(config).getAsJsonObject();
 
-        DB_URL = configObject.get("db-url").getAsString();
-        DB_USER = configObject.get("db-user").getAsString();
-        DB_PASSWORD = configObject.get("db-password").getAsString();
+            // Safely check each field exists before getting it
+            if (configObject.has("db-url")) {
+                DB_URL = configObject.get("db-url").getAsString();
+            } else {
+                LOGGER.warn("db-url missing in config file");
+            }
+
+            if (configObject.has("db-user")) {
+                DB_USER = configObject.get("db-user").getAsString();
+            } else {
+                LOGGER.warn("db-user missing in config file");
+            }
+
+            if (configObject.has("db-password")) {
+                DB_PASSWORD = configObject.get("db-password").getAsString();
+            } else {
+                LOGGER.warn("db-password missing in config file");
+            }
+
+        } catch (Exception e) {
+            LOGGER.error("Error reading config file", e);
+            // Let Config.java handle the defaults - don't set values here
+        }
     }
 
     public static String readOrCopyFile(Path path, String exampleFile) throws IOException {
