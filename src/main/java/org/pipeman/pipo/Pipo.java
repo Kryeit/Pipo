@@ -14,6 +14,7 @@ import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import org.pipeman.pipo.auth.UserApi;
 import org.pipeman.pipo.commands.CommandListener;
 import org.pipeman.pipo.commands.minecraft.*;
 import org.pipeman.pipo.listener.discord.ButtonInteractionListener;
@@ -189,6 +190,7 @@ public final class Pipo implements DedicatedServerModInitializer {
     public void registerDisableEvent() {
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
             JDA.shutdown();
+            UserApi.shutdown();
             restApiServer.stop();
             restApiServer = null;
             JDA = null;
