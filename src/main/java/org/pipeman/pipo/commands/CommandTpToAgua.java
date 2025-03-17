@@ -1,6 +1,6 @@
 package org.pipeman.pipo.commands;
 
-import com.kryeit.idler.MinecraftServerSupplier;
+import org.pipeman.pipo.MinecraftServerSupplier;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.minecraft.server.MinecraftServer;

@@ -1,7 +1,7 @@
 package org.pipeman.pipo.rest;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.kryeit.idler.MinecraftServerSupplier;
+import org.pipeman.pipo.MinecraftServerSupplier;
 import com.kryeit.idler.afk.AfkPlayer;
 import io.javalin.http.Context;
 import io.javalin.websocket.WsCloseContext;

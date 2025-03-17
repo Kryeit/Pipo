@@ -16,6 +16,9 @@ public class PostgresDatabase {
     private static final Jdbi JDBI;
     private static final HikariDataSource dataSource;
 
+    public static void initialize() {
+    }
+
     static {
         HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setUsername(ConfigReader.DB_USER);

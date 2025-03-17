@@ -47,7 +47,6 @@ public final class Pipo implements DedicatedServerModInitializer {
 
     private static Pipo instance;
 
-    public static HashMap<UUID, Long> lastActiveTime = new HashMap<>();
     private RestApiServer restApiServer;
 
     @Override
@@ -61,6 +60,8 @@ public final class Pipo implements DedicatedServerModInitializer {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        PostgresDatabase.initialize();
 
         try {
             discordRegistry = new PlayerDiscordRegistry("mods/" + MODID, "discord_registry.properties");

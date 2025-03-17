@@ -1,6 +1,6 @@
 package org.pipeman.pipo.commands;
 
-import com.kryeit.idler.MinecraftServerSupplier;
+import org.pipeman.pipo.MinecraftServerSupplier;
 import com.kryeit.idler.afk.AfkPlayer;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
