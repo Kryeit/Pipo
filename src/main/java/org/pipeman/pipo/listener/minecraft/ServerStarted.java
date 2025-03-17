@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.server.MinecraftServer;
 import org.pipeman.pipo.Pipo;
+import org.pipeman.pipo.PostgresDatabase;
 import org.pipeman.pipo.auth.UserApi;
 
 import java.awt.*;
@@ -18,6 +19,8 @@ public class ServerStarted implements ServerLifecycleEvents.ServerStarted {
     private static final String rolePinged = "1237771841850834954";
     @Override
     public void onServerStarted(MinecraftServer server) {
+        PostgresDatabase.initialize();
+
         EmbedBuilder builder = new EmbedBuilder()
                 .setColor(new Color(59, 152, 0))
                 .setTitle("Kryeit.com");

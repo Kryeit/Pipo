@@ -1,6 +1,5 @@
 package org.pipeman.pipo;
 
-import com.kryeit.idler.config.ConfigReader;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.Permission;
@@ -18,6 +17,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import org.pipeman.pipo.auth.UserApi;
 import org.pipeman.pipo.commands.CommandListener;
 import org.pipeman.pipo.commands.minecraft.*;
+import org.pipeman.pipo.config.ConfigReader;
 import org.pipeman.pipo.listener.discord.ButtonInteractionListener;
 import org.pipeman.pipo.listener.discord.DirectMessageListener;
 import org.pipeman.pipo.listener.discord.DownloadModsListener;
@@ -60,8 +60,6 @@ public final class Pipo implements DedicatedServerModInitializer {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        PostgresDatabase.initialize();
 
         try {
             discordRegistry = new PlayerDiscordRegistry("mods/" + MODID, "discord_registry.properties");

@@ -1,6 +1,7 @@
 package org.pipeman.pipo.rest;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import net.minecraft.server.MinecraftServer;
 import org.pipeman.pipo.MinecraftServerSupplier;
 import com.kryeit.idler.afk.AfkPlayer;
 import io.javalin.http.Context;
@@ -28,7 +29,10 @@ public class OnlineApi {
     public static void wsConnect(WsConnectContext ctx) {
         ctx.enableAutomaticPings();
         connections.add(ctx);
-        ctx.send(getOnlinePlayers());
+
+        if (MinecraftServerSupplier.getServer() != null) {
+            ctx.send(getOnlinePlayers());
+        }
     }
 
     public static void wsClose(WsCloseContext ctx) {
