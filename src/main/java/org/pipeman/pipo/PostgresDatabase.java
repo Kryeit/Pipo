@@ -6,7 +6,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.core.mapper.reflect.ConstructorMapper;
 import org.pipeman.pipo.auth.User;
-import org.pipeman.pipo.config.ConfigReader;
+import org.pipeman.pipo.config.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,9 +21,9 @@ public class PostgresDatabase {
 
     static {
         HikariConfig hikariConfig = new HikariConfig();
-        hikariConfig.setUsername(ConfigReader.DB_USER);
-        hikariConfig.setPassword(ConfigReader.DB_PASSWORD);
-        hikariConfig.setJdbcUrl(ConfigReader.DB_URL);
+        hikariConfig.setUsername(Config.dbUrl);
+        hikariConfig.setPassword(Config.dbPassword);
+        hikariConfig.setJdbcUrl(Config.dbUrl);
 
         try {
             dataSource = new HikariDataSource(hikariConfig);
