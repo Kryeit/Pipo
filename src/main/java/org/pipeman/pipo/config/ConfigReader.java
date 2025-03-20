@@ -25,24 +25,9 @@ public class ConfigReader {
             String config = readOrCopyFile(path.resolve("config.json"), "/config.json");
             JsonObject configObject = JsonParser.parseString(config).getAsJsonObject();
 
-            // Safely check each field exists before getting it
-            if (configObject.has("db-url")) {
-                DB_URL = configObject.get("db-url").getAsString();
-            } else {
-                LOGGER.warn("db-url missing in config file");
-            }
-
-            if (configObject.has("db-user")) {
-                DB_USER = configObject.get("db-user").getAsString();
-            } else {
-                LOGGER.warn("db-user missing in config file");
-            }
-
-            if (configObject.has("db-password")) {
-                DB_PASSWORD = configObject.get("db-password").getAsString();
-            } else {
-                LOGGER.warn("db-password missing in config file");
-            }
+            DB_URL = configObject.get("db-url").getAsString();
+            DB_USER = configObject.get("db-user").getAsString();
+            DB_PASSWORD = configObject.get("db-password").getAsString();
 
         } catch (Exception e) {
             LOGGER.error("Error reading config file", e);

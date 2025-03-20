@@ -51,15 +51,14 @@ public final class Pipo implements DedicatedServerModInitializer {
 
     @Override
     public void onInitializeServer() {
-        instance = this;
-        CommandLinkDiscord.codes = new HashMap<>();
-        restApiServer = new RestApiServer();
-
         try {
             ConfigReader.readFile(Path.of("config/" + MODID));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        instance = this;
+        CommandLinkDiscord.codes = new HashMap<>();
+        restApiServer = new RestApiServer();
 
         try {
             discordRegistry = new PlayerDiscordRegistry("mods/" + MODID, "discord_registry.properties");

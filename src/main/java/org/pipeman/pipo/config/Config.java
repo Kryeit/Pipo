@@ -3,7 +3,7 @@ package org.pipeman.pipo.config;
 import static org.pipeman.pipo.config.ConfigReader.*;
 
 public class Config {
-    public static final boolean production = false;
+    public static final boolean production = true;
 
     public static final String dbUrl = production
             ? DB_URL
