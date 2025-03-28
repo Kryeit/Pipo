@@ -98,6 +98,7 @@ public class  Utils {
     private static void copyRect(BufferedImage in, BufferedImage out, int x, int y, int width, int height, int destX, int destY) {
         for (int xI = 0; xI < width; xI++) {
             for (int yI = 0; yI < height; yI++) {
+                if (in == null || out == null) continue;
                 Color newColor = new Color(in.getRGB(xI + x, yI + y), true);
 
                 if (newColor.getAlpha() == 0) continue;
