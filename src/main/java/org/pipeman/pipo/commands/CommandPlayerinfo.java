@@ -81,9 +81,9 @@ public class CommandPlayerinfo {
             embedBuilder.addField(
                     "Other statistics",
                     String.format("%.1f km walked, %d deaths, %d mobs killed",
-                            OfflinesStats.getPlayerStat("walk_one_cm", UserApi.getUUIDbyName(finalPlayerName)) / 100_000d,
-                            OfflinesStats.getPlayerStat("deaths", UserApi.getUUIDbyName(finalPlayerName)),
-                            OfflinesStats.getPlayerStat("mob_kills", UserApi.getUUIDbyName(finalPlayerName))
+                            OfflinesStats.getPlayerStat("minecraft:walk_one_cm", UserApi.getUUIDbyName(finalPlayerName)) / 100_000d,
+                            OfflinesStats.getPlayerStat("minecraft:deaths", UserApi.getUUIDbyName(finalPlayerName)),
+                            OfflinesStats.getPlayerStat("minecraft:mob_kills", UserApi.getUUIDbyName(finalPlayerName))
                     ),
                     false
             );

@@ -1,40 +1,27 @@
 package org.pipeman.pipo.offline;
 
-import org.json.JSONObject;
+import org.pipeman.pipo.PostgresDatabase;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.UUID;
 
 public class OfflinesStats {
+
     public static long getPlayerStat(String stat, UUID player) {
         return getPlayerStat("minecraft:custom", stat, player);
     }
 
     public static long getPlayerStat(String category, String stat, UUID player) {
-        File playerDataDirectory = new File("world/stats/");
-        File[] statDataFiles = playerDataDirectory.listFiles((dir, name) -> name.endsWith(".json"));
+        return PostgresDatabase.getJdbi().withHandle(handle -> {
+            String query = "SELECT stats -> :category ->> :stat FROM users WHERE uuid = :player";
 
-        if (statDataFiles == null) return 0;
-
-        for (File playerDataFile : statDataFiles) {
-            try {
-                UUID id = UUID.fromString(playerDataFile.getName().replace(".json", ""));
-
-                if (!player.equals(id)) continue;
-
-                String jsonContent = Files.readString(playerDataFile.toPath());
-                JSONObject statData = new JSONObject(jsonContent);
-
-                JSONObject customStats = statData.getJSONObject("stats").optJSONObject(category, new JSONObject());
-                return customStats.optLong("minecraft:" + stat.toLowerCase(), 0);
-            } catch (IllegalArgumentException | IOException e) {
-                System.err.println("Error processing file " + playerDataFile.getName() + ": " + e.getMessage());
-            } catch (Exception e) {
-                System.err.println("Unexpected error: " + e.getMessage());
-            }
-        }
-        return 0;
+            return handle.createQuery(query)
+                    .bind("category", category)
+                    .bind("stat", stat.toLowerCase())
+                    .bind("player", player)
+                    .mapTo(String.class)
+                    .findOne()
+                    .map(Long::parseLong)
+                    .orElse(0L);
+        });
     }
 }

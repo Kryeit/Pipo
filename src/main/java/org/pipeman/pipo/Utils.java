@@ -161,7 +161,7 @@ public class  Utils {
     public static long getPlaytime(UUID uuid) {
         //    long afkTime = AFK_PLUS.getPlayer(player).getTotalTimeAFK() / 1000;
 //        Stat<Identifier> stat = Stats.CUSTOM.getOrCreateStat(Stats.PLAY_TIME);
-        long playtime = OfflinesStats.getPlayerStat("play_time", uuid) / 20;
+        long playtime = OfflinesStats.getPlayerStat("minecraft:play_time", uuid) / 20;
         //    return Math.max(0, playtime - afkTime);
         return Math.max(0, playtime);
     }

@@ -77,9 +77,9 @@ public class Leaderboard {
                 rawValue = switch (name) {
                     case "playtime" -> Utils.getPlaytime(player);
                     case "last-played" -> PlayerInformation.of(player, playerName).map(PlayerInformation::lastSeen).orElse(0L);
-                    case "distance-walked" -> customStatisticMapper("walk_one_cm", player);
-                    case "deaths" -> customStatisticMapper("deaths", player);
-                    case "mob-kills" -> customStatisticMapper("mob_kills", player);
+                    case "distance-walked" -> customStatisticMapper("minecraft:walk_one_cm", player);
+                    case "deaths" -> customStatisticMapper("minecraft:deaths", player);
+                    case "mob-kills" -> customStatisticMapper("minecraft:mob_kills", player);
 
                     default -> throw new IllegalStateException("Unexpected value: " + name);
                 };
