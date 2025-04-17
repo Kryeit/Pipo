@@ -33,6 +33,7 @@ public class CommandPlayerinfo {
                 return;
             }
         }
+
         EmbedBuilder embedBuilder = new EmbedBuilder();
         embedBuilder.setTitle(Utils.escapeName(playerName), "https://kryeit.com/@" + playerName);
         embedBuilder.setColor(new Color(59, 152, 0));

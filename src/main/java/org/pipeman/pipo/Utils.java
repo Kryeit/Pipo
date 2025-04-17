@@ -220,10 +220,9 @@ public class  Utils {
     public static List<String> getNameSuggestions(String input) {
         String lcInput = input.toLowerCase();
         List<String> players = new ArrayList<>();
-        for (UUID id : UserApi.getKnownPlayers()) {
+        for (String name : UserApi.getKnownPlayersWithNames().values()) {
             if (players.size() >= 5) break;
 
-            String name = UserApi.getNameByUUID(id);
             if (name != null && name.toLowerCase().contains(lcInput) && !players.contains(name)) {
                 players.add(name);
             }
