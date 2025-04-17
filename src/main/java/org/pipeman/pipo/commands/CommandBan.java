@@ -1,5 +1,7 @@
 package org.pipeman.pipo.commands;
 
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 import org.pipeman.pipo.MinecraftServerSupplier;
 import com.mojang.authlib.GameProfile;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -51,6 +53,14 @@ public class CommandBan {
                 parsedDuration == null ? null : Date.from(Instant.now().plus(parsedDuration)),
                 reason
         ));
+
+        ServerPlayerEntity player = server.getPlayerManager().getPlayer(profile.get().getId());
+
+        if (player != null) {
+            player.networkHandler.disconnect(Text.literal(
+                    "You have been banned from the server"
+            ));
+        }
 
         reply(event, profile.get().getName() + " has been banned");
     }
